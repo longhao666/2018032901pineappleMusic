@@ -45,7 +45,7 @@ void DatabaseDriver::slotLogInClicked()
 void DatabaseDriver::slotQuitClicked()
 {
     qDebug() << "void databaseDriver::slotQuitClicked()";
-//    this->close();
+//    this->hide();
     emit signalQuitClicked();
 }
 

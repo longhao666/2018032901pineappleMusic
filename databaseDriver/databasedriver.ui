@@ -72,7 +72,12 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="passwordlineEdit_2"/>
+       <widget class="QLineEdit" name="passwordlineEdit_2">
+        <property name="styleSheet">
+         <string notr="true">
+</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="forgetpushButton_3">

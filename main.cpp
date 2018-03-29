@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
         qDebug() << query.value(0).toString() << query.value(1).toString() << query.value(2).toString();
     }
     MainWindow w;
-    w.show();
+//    w.show();
 
     return a.exec();
 }

@@ -106,7 +106,9 @@ private:
     void handleCursor(QMediaPlayer::MediaStatus status);
     void updateDurationInfo(qint64 currentInfo);
 
+public:
     QMediaPlayer *player;
+private:
     QMediaPlaylist *playlist;
     VideoWidget *videoWidget;
     QLabel *coverLabel;
