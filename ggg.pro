@@ -53,3 +53,6 @@ HEADERS += \
 FORMS += \
         mainwindow.ui \
     databaseDriver/databasedriver.ui
+
+RESOURCES += \
+    pic.qrc

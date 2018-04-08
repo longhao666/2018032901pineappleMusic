@@ -1,13 +1,14 @@
 #include "databasedriver.h"
 #include "ui_databasedriver.h"
 #include <QDir>
-
+#include <QPainter>
 
 DatabaseDriver::DatabaseDriver(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::databaseDriver)
 {
     ui->setupUi(this);
+
     this->setWindowTitle("  登录  ");
 
     QSqlDatabase db = QSqlDatabase::database("lh1");
@@ -28,6 +29,16 @@ DatabaseDriver::~DatabaseDriver()
     delete query;
 }
 
+void DatabaseDriver::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+    QPainter painter(this);
+    // 反走样
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    // 绘制图标
+    painter.drawPixmap(rect(), QPixmap(":/new/image/image/b7.png"));
+}
+
 void DatabaseDriver::slotLogInClicked()
 {
 #if 0
@@ -35,10 +46,15 @@ void DatabaseDriver::slotLogInClicked()
 #endif
     QString s1 = ui->userlineEdit->text();
     QString s2 = ui->passwordlineEdit_2->text();
-    if(!logInUser(*query, s1, s2)) {
-        QMessageBox::warning(this, "waring", "user is exist,failed");
-    }else {
-        QMessageBox::information(this, "information", "logIn is successed");    
+    int re = logInUser(*query, s1, s2);
+    if(re == 0) {
+        QMessageBox::warning(this, "information", "注册成功！  ", QMessageBox::Ok);
+    }else if(re == 1) {
+        QMessageBox::information(this, "information", "注册失败，请输入用户名   ", QMessageBox::Ok);
+    }else if(re == 2) {
+        QMessageBox::information(this, "information", "注册失败，请输入密码   ", QMessageBox::Ok);
+    }else if(re == 4) {
+        QMessageBox::information(this, "information", "注册失败，用户名存在，请重新输入   ", QMessageBox::Ok);
     }
 }
 
@@ -53,15 +69,17 @@ void DatabaseDriver::slotEnterClicked()
 {
     QString s1 = ui->userlineEdit->text();
     QString s2 = ui->passwordlineEdit_2->text();
-    if(!entertUserAndPassword(*query, s1, s2)) {
-        QMessageBox::warning(this, "waring", "failed! ");
-    }else {
-        QMessageBox::information(this, "information", "successed! ");
+    int re = entertUserAndPassword(*query, s1, s2);
+    if(re == 0) {
+//        QMessageBox::information(this, "information", "登录成功!   ", QMessageBox::Ok);
+        ui->userlineEdit->clear();
+        ui->passwordlineEdit_2->clear();
         emit signalEnterClicked();
-        this->hide();
+    }else if(re == 4) {
+        QMessageBox::information(this, "information", "用户名或密码错误!   ", QMessageBox::Ok);
+    }else if(re == 1) {
+        QMessageBox::warning(this, "information", "请输入用户名或密码！  ", QMessageBox::Ok);
     }
-//    ui->userlineEdit->clear();
-    ui->passwordlineEdit_2->clear();
 }
 
 void DatabaseDriver::slotForgetClicked()

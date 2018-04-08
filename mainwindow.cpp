@@ -52,6 +52,7 @@ void MainWindow::slotPlayerShow()
 {
     p1->setEnabled(true);
     this->show();
+    databaseDriver->hide();
 //    player->show();
 }
 

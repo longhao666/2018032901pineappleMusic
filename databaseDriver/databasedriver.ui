@@ -74,8 +74,7 @@
       <item>
        <widget class="QLineEdit" name="passwordlineEdit_2">
         <property name="styleSheet">
-         <string notr="true">
-</string>
+         <string notr="true"/>
         </property>
        </widget>
       </item>

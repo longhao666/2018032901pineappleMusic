@@ -11,9 +11,9 @@
 
 
 bool createConnection();
-bool logInUser(QSqlQuery &q, QString t1, QString t2);
+int logInUser(QSqlQuery &q, QString t1, QString t2);
 void addUser(QSqlQuery &q, int t1, QString t2);
-bool entertUserAndPassword(QSqlQuery &q, QString t1, QString t2);
+int entertUserAndPassword(QSqlQuery &q, QString t1, QString t2);
 
 
 

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "connection.h"
+#include <QPaintEvent>
 
 
 namespace Ui {
@@ -22,6 +23,9 @@ signals:
     void signalLogInClicked();
     void signalQuitClicked();
     void signalForgetClicked();
+
+protected:
+    void paintEvent(QPaintEvent *event);
 
 private slots:
     void slotLogInClicked();
