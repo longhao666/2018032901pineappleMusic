@@ -38,7 +38,10 @@ SOURCES += \
     musicPlayer/player.cpp \
     musicPlayer/playercontrols.cpp \
     musicPlayer/playlistmodel.cpp \
-    musicPlayer/videowidget.cpp
+    musicPlayer/videowidget.cpp \
+    lhMusicPlayer/musicplayer.cpp \
+#    lhMusicPlayer/songlist.cpp \
+    lhMusicPlayer/music.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -48,11 +51,16 @@ HEADERS += \
     musicPlayer/player.h \
     musicPlayer/playercontrols.h \
     musicPlayer/playlistmodel.h \
-    musicPlayer/videowidget.h
+    musicPlayer/videowidget.h \
+    lhMusicPlayer/musicplayer.h \
+#    lhMusicPlayer/songlist.h \
+    lhMusicPlayer/music.h
 
 FORMS += \
         mainwindow.ui \
-    databaseDriver/databasedriver.ui
+    databaseDriver/databasedriver.ui \
+    lhMusicPlayer/musicplayer.ui \
+    lhMusicPlayer/music.ui
 
 RESOURCES += \
     pic.qrc

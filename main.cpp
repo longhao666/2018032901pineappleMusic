@@ -1,7 +1,9 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include "lhMusicPlayer/musicplayer.h"
+#include "lhMusicPlayer/music.h"
 
-#define QS 1
+#define QS 0
 
 #if QS
 #include <QSplashScreen>
@@ -11,6 +13,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+
 #if QS
     QSplashScreen *splash = new QSplashScreen;
     splash->setPixmap(QPixmap(":/images/b1.png"));//设置图片
@@ -38,7 +42,12 @@ int main(int argc, char *argv[])
     while(query.next()) {
         qDebug() << query.value(0).toString() << query.value(1).toString() << query.value(2).toString();
     }
-    MainWindow w;
+
+//    Music m;
+//    m.show();
+    MusicPlayer m;
+    m.show();
+//    MainWindow w;
 //    w.show();
 
     return a.exec();
