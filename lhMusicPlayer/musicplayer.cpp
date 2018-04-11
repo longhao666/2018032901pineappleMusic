@@ -5,12 +5,17 @@
 #include <QUrl>
 #include <QTime>
 #include <QPainter>
+#include "lyricfile.h"
+#include <map>
+
+int m_lrcCount = 4;
 
 MusicPlayer::MusicPlayer(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MusicPlayer)
 {
     ui->setupUi(this);
+
     this->setWindowTitle(tr("this is Music"));
 
     player = new QMediaPlayer(this);
@@ -19,6 +24,7 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
     songStringListPath = new QStringList;
     m_playCount = 0;
     backNum = 0;
+    lrc = new SongLyric;
 
     connect(ui->openpushButton, &QPushButton::clicked, this, &MusicPlayer::slotOpenClicked);
     connect(ui->stoppushButton, &QPushButton::clicked, this, &MusicPlayer::slotStopClicked);
@@ -42,8 +48,9 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 MusicPlayer::~MusicPlayer()
 {
     delete ui;
-//    delete songList;
     delete songStringList;
+    delete songStringListPath;
+    delete lrc;
 }
 
 void MusicPlayer::paintEvent(QPaintEvent *event)
@@ -83,7 +90,6 @@ void pathToSong(const QStringList &s1, QStringList &s2) {
 
 void MusicPlayer::slotOpenClicked()
 {
-    ui->listWidget->clear();
 #if 0
     QStringList str = QFileDialog::getOpenFileNames(this,
                                                     tr("open Music"),
@@ -108,6 +114,7 @@ void MusicPlayer::slotOpenClicked()
         qDebug() << "str is NULL";
         return ;
     }
+    ui->listWidget->clear();
     songStringListPath->push_back(str);
     int count = str.toStdString().find_last_of("/");
     QString m((str.toStdString().c_str()) + count + 1);
@@ -137,6 +144,11 @@ void MusicPlayer::slotPreClicked()
     }
     player->setMedia(QUrl(songStringListPath->at(m_playCount)));
     player->play();
+#if 0
+    QString str1 = songStringList->at(m_playCount);
+    QString str2 = str1.right(4);
+    lrc->getLyric(str2.toStdString().c_str());
+#endif
     ui->pausepushButton->setText(tr("暂停"));
 }
 
@@ -150,6 +162,11 @@ void MusicPlayer::slotPauseClicked()
         ui->pausepushButton->setText(tr("播放"));
     }
     qDebug() << player->duration();
+#if 0
+    QString str1 = songStringList->at(m_playCount);
+    QString str2 = str1.right(4);
+    lrc->getLyric(str2.toStdString().c_str());
+#endif
 }
 
 void MusicPlayer::slotNextClicked()
@@ -197,6 +214,16 @@ void MusicPlayer::slotDoubleSongClick(const QModelIndex &index)
     player->setMedia(QUrl(songStringListPath->at(m_playCount)));
     player->play();
     ui->pausepushButton->setText(tr("暂停"));
+#if 1
+    QString str1 = songStringListPath->at(m_playCount);
+    QString str2 = str1.left(str1.length() - 4) + QString(".lrc");
+//    qDebug() << str2;
+    if(! lrc->getLyric(str2.toStdString().c_str())) {
+        lrc->lrc.clear();
+        ui->textBrowser->clear();
+//        qDebug() << "failed";
+    };
+#endif
 }
 
 void MusicPlayer::slotMusicPositionChange(qint64 position)
@@ -205,6 +232,7 @@ void MusicPlayer::slotMusicPositionChange(qint64 position)
         ui->timehorizontalSlider->setValue(position / 1000);
     }
     updateDurationInfo(position / 1000);
+    displaySongLyric(position / 1000);
 }
 
 void MusicPlayer::slotMusicDurationChange(qint64 duration)
@@ -242,7 +270,36 @@ void MusicPlayer::updateDurationInfo(qint64 currentInfo)
     if(ui->timehorizontalSlider->value() == musicTime-1) {
 //        qDebug() << ui->timehorizontalSlider->value() << musicTime;
         slotNextClicked();
+        m_lrcCount = 4;
+        ui->textBrowser->clear();
+        lrc->lrc.clear();
     }
+}
+
+void MusicPlayer::displaySongLyric(int time)
+{
+    if(lrc->lrc.count(time) == 0) {
+        return ;
+    }
+    if(m_lrcCount == 4) {
+        QString str1(lrc->lrc[-4].c_str());
+        ui->textBrowser->append(str1);
+        QString str2(lrc->lrc[-3].c_str());
+        ui->textBrowser->append(str2);
+        QString str3(lrc->lrc[-2].c_str());
+        ui->textBrowser->append(str3);
+        QString str4(lrc->lrc[-1].c_str());
+        ui->textBrowser->append(str4);
+    }
+    QString str(lrc->lrc[time].c_str());
+    ui->textBrowser->append(str);
+    m_lrcCount++;
+//    qDebug() << count << "==" << lrc->lrcCount;
+//    if(count == lrc->lrcCount) {
+//        count = 4;
+//        ui->textBrowser->clear();
+//        lrc->lrc.clear();
+//    }
 }
 
 

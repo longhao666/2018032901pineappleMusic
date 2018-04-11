@@ -20,6 +20,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+signals:
+    void signalMainWidgetChange(int select = 0);
+
 private slots:
     void slotEnterWidget();
     void slotMusicWidget();
@@ -34,6 +37,7 @@ private:
     Player *player;
     QPushButton *p1;
     MusicPlayer *musicPlayer;
+
 };
 
 #endif // MAINWINDOW_H

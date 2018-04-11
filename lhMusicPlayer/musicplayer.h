@@ -5,7 +5,7 @@
 #include <QMediaPlayer>
 
 
-class SongList;
+class SongLyric;
 
 namespace Ui {
 class MusicPlayer;
@@ -18,6 +18,9 @@ class Q_DECL_EXPORT MusicPlayer : public QWidget
 public:
     explicit MusicPlayer(QWidget *parent = 0);
     ~MusicPlayer();
+
+public slots:
+
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -39,18 +42,19 @@ private slots:
 
 private:
     void updateDurationInfo(qint64 currentInfo);
+    void displaySongLyric(int time);
 
 
 
 private:
     Ui::MusicPlayer *ui;
     QMediaPlayer *player;
-    SongList *songList;
     QStringList *songStringList;
     QStringList *songStringListPath;
     int m_playCount;
     int musicTime;
     int backNum;
+    SongLyric *lrc;
 };
 
 #endif // MUSICPLAYER_H

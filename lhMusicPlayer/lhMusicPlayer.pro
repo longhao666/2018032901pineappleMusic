@@ -36,7 +36,9 @@ FORMS += \
     musicplayer.ui
 
 HEADERS += \
-    musicplayer.h
+    musicplayer.h \
+    lyricfile.h
 
 SOURCES += \
-    musicplayer.cpp
+    musicplayer.cpp \
+    lyricfile.cpp

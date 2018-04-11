@@ -90,6 +90,7 @@ private:
     QString trackInfo;
     QString statusInfo;
     qint64 duration;
+    QStringList *stringList;
 };
 
 #endif // PLAYER_H

@@ -168,11 +168,13 @@ Player::Player(QWidget *parent)
         fullScreenButton->setEnabled(false);
     }
 
+    stringList = new QStringList;
     metaDataChanged();
 }
 
 Player::~Player()
 {
+    delete stringList;
 }
 
 bool Player::isPlayerAvailable() const
@@ -182,6 +184,7 @@ bool Player::isPlayerAvailable() const
 
 void Player::open()
 {
+#if 0
     //qDebug("jinle open");
     QFileDialog fileDialog(this);
     fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
@@ -198,6 +201,24 @@ void Player::open()
     if (fileDialog.exec() == QDialog::Accepted)
         addToPlaylist(fileDialog.selectedUrls());
     //qDebug("chule open");
+#endif
+#if 1
+    QString str = QFileDialog::getOpenFileName(this,
+                                               tr("Open Files"),
+                                               tr(""),
+                                               tr("*.mp4"));
+    if(str == NULL) {
+        qDebug() << "str is NULL";
+        return ;
+    }
+    for(int i=0; i<stringList->size(); i++) {
+        if(stringList->at(i) == str) {
+            return ;
+        }
+    }
+    stringList->push_back(str);
+    playlist->addMedia(QUrl(str));
+#endif
 }
 
 static bool isPlaylist(const QUrl &url) // Check for ".m3u" playlists.

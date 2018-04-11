@@ -62,6 +62,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     musicPlayer = new MusicPlayer(this);
     musicPlayer->setGeometry(0, 50, this->width(), this->height()-50);
+#if 0
+    connect(this, &MainWindow::signalMainWidgetChange, musicPlayer, &MusicPlayer::slotStopClicked);
+#elif 1
+    connect(this, SIGNAL(signalMainWidgetChange()), musicPlayer, SLOT(slotStopClicked()));
+#endif
 
     p1 = new QPushButton(tr("退出"), this);
     ui->mainToolBar->addWidget(p1);
@@ -81,8 +86,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(databaseDriver, SIGNAL(signalEnterClicked()), this, SLOT(slotPlayerShow()));
     connect(databaseDriver, SIGNAL(signalQuitClicked()), this, SLOT(slotWidgetClost()));
 #endif
+
     this->slotEnterWidget();
-    this->slotMusicAction();
+
 }
 
 MainWindow::~MainWindow()
@@ -95,9 +101,10 @@ MainWindow::~MainWindow()
 void MainWindow::slotEnterWidget()
 {
     p1->setEnabled(false);
-//    player->hide();
     this->hide();
     databaseDriver->show();
+    emit signalMainWidgetChange(0);
+    player->player->stop();
 }
 
 void MainWindow::slotMusicWidget()
@@ -110,12 +117,11 @@ void MainWindow::slotPlayerShow()
     p1->setEnabled(true);
     this->show();
     databaseDriver->hide();
-//    player->show();
+    this->slotMusicAction();
 }
 
 void MainWindow::slotWidgetClost()
 {
-//    this->close();
     databaseDriver->close();
 }
 
@@ -124,6 +130,8 @@ void MainWindow::slotMusicAction()
     qDebug() << "this is void MainWindow::slotMusicAction()";
     player->hide();
     musicPlayer->show();
+    player->player->stop();
+
 }
 
 void MainWindow::slotMVAction()
@@ -131,4 +139,5 @@ void MainWindow::slotMVAction()
     qDebug() << "this is void MainWindow::slotMVAction()";
     player->show();
     musicPlayer->hide();
+    emit signalMainWidgetChange(0);
 }
