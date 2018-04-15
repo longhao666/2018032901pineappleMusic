@@ -16,6 +16,8 @@ VideoWidget::VideoWidget(QWidget *parent)
     setPalette(p);
 
     setAttribute(Qt::WA_OpaquePaintEvent);
+
+//    this->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu);
 }
 
 void VideoWidget::keyPressEvent(QKeyEvent *event)
@@ -69,7 +71,7 @@ void VideoWidget::mouseDoubleClickEvent(QMouseEvent *event)
  */
 void VideoWidget::mousePressEvent(QMouseEvent *event)
 {
-#if 1
+#if 0
     qDebug() << event->x() << event->y();
     qDebug() << "event->x() << event->y()";
     qDebug() << event;

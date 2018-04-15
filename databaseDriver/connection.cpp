@@ -22,17 +22,17 @@ bool createConnection()
         return false;
     }
     QSqlQuery query1(db1);
-#if 1
+#if 0
     if(!query1.exec("create table user (id char primary key, "
                     "username char unique, "
                     "password char) ")) {
         qDebug() << query1.lastError();
     }
 #endif
-#if 0
+#if 1
     if(!query1.exec("create table user (id char check(length(id) between 0 and 30) primary key, "
                     "username char check(length(username) between 5 and 15) unique, "
-                    "password char check(length(password) between 5 and 15)) ")) {
+                    "password char check(length(password) between 6 and 6)) ")) {
         qDebug() << query1.lastError();
     }
 #endif

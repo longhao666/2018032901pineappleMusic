@@ -6,11 +6,8 @@
 
 QT       += core gui
 QT += sql
-QT += network \
-      xml \
-      multimedia \
-      multimediawidgets \
-      widgets
+QT += multimedia \
+    multimediawidgets \
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

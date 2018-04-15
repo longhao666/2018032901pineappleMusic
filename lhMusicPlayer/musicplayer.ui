@@ -17,10 +17,9 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,2">
      <item>
-      <widget class="QListWidget" name="listWidget">
+      <widget class="MyListWidget" name="listWidget">
        <property name="styleSheet">
-        <string notr="true">background-color: rgba(255, 255, 255, 0);
-</string>
+        <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
        </property>
       </widget>
      </item>
@@ -28,6 +27,9 @@
       <widget class="QTextBrowser" name="textBrowser">
        <property name="enabled">
         <bool>true</bool>
+       </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::NoContextMenu</enum>
        </property>
        <property name="styleSheet">
         <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
@@ -72,36 +74,66 @@ p, li { white-space: pre-wrap; }
      </item>
      <item>
       <widget class="QPushButton" name="stoppushButton">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
        <property name="text">
-        <string>停止</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="prepushButton">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
        <property name="text">
-        <string>上一首</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pausepushButton">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
        <property name="text">
-        <string>播放</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="nextpushButton">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
        <property name="text">
-        <string>下一首</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="mutepushButton">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
        <property name="text">
-        <string>静音</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -133,8 +165,14 @@ p, li { white-space: pre-wrap; }
      </item>
      <item>
       <widget class="QPushButton" name="skinpushButton">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
        <property name="text">
-        <string>换皮肤</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -142,6 +180,13 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyListWidget</class>
+   <extends>QListWidget</extends>
+   <header>mylistwidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

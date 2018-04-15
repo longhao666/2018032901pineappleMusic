@@ -7,12 +7,9 @@
 QT       += widgets
 
 QT       += core gui
-QT += sql
-QT += network \
-      xml \
-      multimedia \
-      multimediawidgets \
-      widgets
+
+QT += multimedia
+
 
 TARGET = lhMusicPlayer
 TEMPLATE = lib
@@ -37,8 +34,10 @@ FORMS += \
 
 HEADERS += \
     musicplayer.h \
-    lyricfile.h
+    lyricfile.h \
+    mylistwidget.h
 
 SOURCES += \
     musicplayer.cpp \
-    lyricfile.cpp
+    lyricfile.cpp \
+    mylistwidget.cpp

@@ -1,28 +1,15 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2018-04-09T15:43:10
+# Project created by QtCreator 2018-04-14T11:53:45
 #
 #-------------------------------------------------
 
-QT       += widgets
-
 QT       += core gui
 
-QT += network \
-      xml \
-      multimedia \
-      multimediawidgets \
-      widgets
-#QT += multimedia \
-#    multimediawidgets \
-#    network \
-#    xml \
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = musicPlayer
-TEMPLATE = lib
-DESTDIR = ../bin
-
-#DEFINES += LLLL_LIBRARY
+TARGET = untitled3
+TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -36,19 +23,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 
-HEADERS += \
-    histogramwidget.h \
-    player.h \
-    playercontrols.h \
-    playlistmodel.h \
-    videowidget.h
-
 SOURCES += \
-    histogramwidget.cpp \
-    player.cpp \
-    playercontrols.cpp \
-    playlistmodel.cpp \
-    videowidget.cpp
+        main.cpp \
+        mainwindow.cpp \
+    mylistwidget.cpp
 
-DISTFILES += \
-    musicPlayer.pri
+HEADERS += \
+        mainwindow.h \
+    mylistwidget.h
+
+FORMS += \
+        mainwindow.ui

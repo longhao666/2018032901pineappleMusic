@@ -18,6 +18,9 @@ DatabaseDriver::DatabaseDriver(QWidget *parent) :
 
     this->setWindowTitle("  登录  ");
 
+    ui->userlineEdit->setPlaceholderText(tr("请输入5-15用户名"));
+    ui->passwordlineEdit_2->setPlaceholderText(tr("请输入6位密码"));
+
     QSqlDatabase db = QSqlDatabase::database("lh1");
     query = new QSqlQuery(db);
 
@@ -61,8 +64,12 @@ void DatabaseDriver::slotLogInClicked()
     }else if(re == 2) {
         QMessageBox::information(this, "information", "注册失败，请输入密码   ", QMessageBox::Ok);
     }else if(re == 4) {
-        QMessageBox::information(this, "information", "注册失败，用户名存在，请重新输入   ", QMessageBox::Ok);
+        QMessageBox::information(this, "information", "注册失败，用户名存在或密码不对，请重新输入   ", QMessageBox::Ok);
     }
+#if 0
+    ui->userlineEdit->clear();
+    ui->passwordlineEdit_2->clear();
+#endif
 }
 
 void DatabaseDriver::slotQuitClicked()

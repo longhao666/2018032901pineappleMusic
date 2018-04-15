@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QPushButton>
 
+#include <QPushButton>
 #include "musicplayer.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(tr("pineappleMusic"));
 
 #if 0
     QMenu *printMenu = ui->menuBar->addMenu(tr("编辑(&E)")); // 添加编辑菜单

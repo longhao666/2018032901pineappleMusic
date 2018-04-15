@@ -22,6 +22,7 @@ public:
 public slots:
 
 
+
 protected:
     void paintEvent(QPaintEvent *event);
 
@@ -39,10 +40,15 @@ private slots:
     void slotMusicDurationChange(qint64 duration);
     void slotVolumeChange(int position);
     void slotTimeChange(int position);
+    void slotDeleteItem(int row);
+    void slotNameUp(int row);
+    void slotNameDown(int row);
+    void slotListUpdate();
 
 private:
     void updateDurationInfo(qint64 currentInfo);
     void displaySongLyric(int time);
+    void getFilePath();
 
 
 
@@ -55,6 +61,7 @@ private:
     int musicTime;
     int backNum;
     SongLyric *lrc;
+    QMediaPlayer::State musicState;
 };
 
 #endif // MUSICPLAYER_H
