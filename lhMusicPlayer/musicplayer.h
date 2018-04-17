@@ -49,6 +49,7 @@ private:
     void updateDurationInfo(qint64 currentInfo);
     void displaySongLyric(int time);
     void getFilePath();
+    void showLyric();
 
 
 
