@@ -12,7 +12,7 @@ QT += multimedia
 
 
 TARGET = lhMusicPlayer
-TEMPLATE = lib
+TEMPLATE = app
 DESTDIR = ../bin
 
 #DEFINES += LLLL_LIBRARY
@@ -40,4 +40,5 @@ HEADERS += \
 SOURCES += \
     musicplayer.cpp \
     lyricfile.cpp \
-    mylistwidget.cpp
+    mylistwidget.cpp \
+    main.cpp

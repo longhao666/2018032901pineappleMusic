@@ -7,7 +7,7 @@
 
 typedef std::map<int, std::string> LRC;
 
-class SongLyric
+class Q_DECL_EXPORT SongLyric
 {
 public:
     SongLyric();

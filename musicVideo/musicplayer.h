@@ -19,7 +19,6 @@ public:
     explicit MusicPlayer(QWidget *parent = 0);
     ~MusicPlayer();
 
-
 public slots:
 
 
@@ -45,13 +44,11 @@ private slots:
     void slotNameUp(int row);
     void slotNameDown(int row);
     void slotListUpdate();
-    void slotOpenMusicFile();
 
 private:
     void updateDurationInfo(qint64 currentInfo);
     void displaySongLyric(int time);
     void getFilePath();
-    void showLyric();
 
 
 
@@ -65,10 +62,6 @@ private:
     int backNum;
     SongLyric *lrc;
     QMediaPlayer::State musicState;
-
-
 };
-
-
 
 #endif // MUSICPLAYER_H

@@ -6,7 +6,6 @@
 #include <QTime>
 #include <QPainter>
 #include <map>
-#include <QMessageBox>
 
 
 #include "lyricfile.h"
@@ -27,39 +26,24 @@ int m_lrcCount = 4;
 #define STOPIMAGE   "border-image:url(./image/stop.png)"
 #define HOMEIMAGE   "border-image:url(./image/begin.png)"
 
-#define BACKGROUND1     "./image/n14.png"
-#define BACKGROUND2     "./image/n2.png"
-#define BACKGROUND3     "./image/n4.png"
-#define BACKGROUND4     "./image/n12.png"
-#define BACKGROUND5     "./image/b8.png"
-#define BACKGROUND6     "./image/n10.png"
-#define BACKGROUND7     "./image/n9.png"
-#define BACKGROUND8     "./image/n3.png"
-#define BACKGROUND9     "./image/n1.png"
-#define BACKGROUND10    "./image/n8.png"
-#define BACKGROUND11    "./image/n5.png"
-#define BACKGROUND12    "./image/n11.png"
-#define BACKGROUND13    "./image/n15.png"
-
-
 MusicPlayer::MusicPlayer(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MusicPlayer)
 {
-    this->ui->setupUi(this);
+    ui->setupUi(this);
 
     this->setWindowTitle(tr("this is Music"));
 
-    this->player = new QMediaPlayer(this);
+    player = new QMediaPlayer(this);
 
-    this->songStringList = new QStringList;
-    this->songStringListPath = new QStringList;
-    this->m_playCount = 0;
-    this->backNum = 0;
-    this->lrc = new SongLyric;
-    this->musicState = QMediaPlayer::StoppedState;
+    songStringList = new QStringList;
+    songStringListPath = new QStringList;
+    m_playCount = 0;
+    backNum = 0;
+    lrc = new SongLyric;
+    musicState = QMediaPlayer::StoppedState;
 
-    //connect(ui->openpushButton, &QPushButton::clicked, this, &MusicPlayer::slotOpenClicked);
+    connect(ui->openpushButton, &QPushButton::clicked, this, &MusicPlayer::slotOpenClicked);
     connect(ui->stoppushButton, &QPushButton::clicked, this, &MusicPlayer::slotStopClicked);
     connect(ui->prepushButton, &QPushButton::clicked, this, &MusicPlayer::slotPreClicked);
     connect(ui->pausepushButton, &QPushButton::clicked, this, &MusicPlayer::slotPauseClicked);
@@ -75,7 +59,6 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
     connect(ui->listWidget, &MyListWidget::signalNameUp, this, &MusicPlayer::slotNameUp);
     connect(ui->listWidget, &MyListWidget::signalNameDown, this, &MusicPlayer::slotNameDown);
     connect(ui->listWidget, &MyListWidget::signalListUpdate, this, &MusicPlayer::slotListUpdate);
-    connect(ui->listWidget, &MyListWidget::signalOpenMusicFile, this, &MusicPlayer::slotOpenMusicFile);
 #endif
     connect(player, &QMediaPlayer::positionChanged, this, &MusicPlayer::slotMusicPositionChange);
     connect(player, &QMediaPlayer::durationChanged, this, &MusicPlayer::slotMusicDurationChange);
@@ -108,19 +91,19 @@ void MusicPlayer::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     const char *backGround[10]={
-                           BACKGROUND1,
-                           BACKGROUND2,
-                           BACKGROUND3,
-                           //BACKGROUND4,
-                           BACKGROUND5,
-                           //BACKGROUND6,
-                           BACKGROUND7,
-                           BACKGROUND8,
-                           BACKGROUND9,
-                           BACKGROUND10,
-                           BACKGROUND11,
-                           //BACKGROUND12,
-                           BACKGROUND13
+                           "./image/n14.png",
+                           "./image/n2.png",
+                           "./image/n4.png",
+                           //"./image/n12.png",
+                           "./image/b8.png",
+                           //"./image/n10.png",
+                           "./image/n9.png",
+                           "./image/n3.png",
+                           "./image/n1.png",
+                           "./image/n8.png",
+                           "./image/n5.png",
+                           //"./image/n11.png",
+                           "./image/n15.png"
     };
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
@@ -168,16 +151,15 @@ void MusicPlayer::slotOpenClicked()
         return ;
     }
     ui->listWidget->clear();
+    songStringListPath->push_back(str);
     int count = str.toStdString().find_last_of("/");
     QString m((str.toStdString().c_str()) + count + 1);
     for(int i=0; i<songStringList->size(); i++) {
         if(songStringList->at(i) == m) {
             qDebug() << "equal";
-            songStringListPath->removeAt(i);
             songStringList->removeAt(i);
         }
     }
-    songStringListPath->push_back(str);
     songStringList->push_back(m);
     ui->listWidget->addItems(*songStringList);
 #endif
@@ -205,17 +187,28 @@ void MusicPlayer::slotPreClicked()
     player->play();
     ui->pausepushButton->setStyleSheet(PAUSEIMAGE);
     m_lrcCount = 4;
-    this->showLyric();
-
+#if 0
+    QString str1 = songStringListPath->at(m_playCount);
+    QString str2 = str1.left(str1.length() - 4) + QString(".lrc");
+    if(! lrc->getLyric(str2.toStdString().c_str())) {
+        lrc->lrc.clear();
+        ui->textBrowser->setText(tr("没有搜索到歌词"));
+    }else {
+        ui->textBrowser->setText(tr("歌词搜索中..."));
+    }
+#endif
+#if 0
+    QString str1 = songStringList->at(m_playCount);
+    QString str2 = str1.right(4);
+    lrc->getLyric(str2.toStdString().c_str());
+#endif
 }
 
 void MusicPlayer::slotPauseClicked()
 {
-#if 1
     if(player->mediaStatus() == QMediaPlayer::NoMedia) {
         return ;
     }
-#endif
     switch (musicState) {
     case QMediaPlayer::PlayingState:
         player->pause();
@@ -232,12 +225,36 @@ void MusicPlayer::slotPauseClicked()
         player->play();
         musicState = QMediaPlayer::PlayingState;
         ui->pausepushButton->setStyleSheet(PAUSEIMAGE);
-        showLyric();
+#if 0
+        QString str1 = songStringListPath->at(m_playCount);
+        QString str2 = str1.left(str1.length() - 4) + QString(".lrc");
+        if(! lrc->getLyric(str2.toStdString().c_str())) {
+            lrc->lrc.clear();
+            ui->textBrowser->setText(tr("没有搜索到歌词"));
+        }else {
+            ui->textBrowser->setText(tr("歌词搜索中..."));
+        }
+#endif
         break;
     }
     default:
         break;
     }
+#if 0
+    if(ui->pausepushButton->text() == "播放") {
+        player->play();
+        ui->pausepushButton->setText(tr("暂停"));
+    }else {
+        player->pause();
+        ui->pausepushButton->setText(tr("播放"));
+    }
+    qDebug() << player->duration();
+#endif
+#if 0
+    QString str1 = songStringList->at(m_playCount);
+    QString str2 = str1.right(4);
+    lrc->getLyric(str2.toStdString().c_str());
+#endif
 }
 
 void MusicPlayer::slotNextClicked()
@@ -254,7 +271,16 @@ void MusicPlayer::slotNextClicked()
     player->play();
     ui->pausepushButton->setStyleSheet(PAUSEIMAGE);
     m_lrcCount = 4;
-    this->showLyric();
+#if 0
+    QString str1 = songStringListPath->at(m_playCount);
+    QString str2 = str1.left(str1.length() - 4) + QString(".lrc");
+    if(! lrc->getLyric(str2.toStdString().c_str())) {
+        lrc->lrc.clear();
+        ui->textBrowser->setText(tr("没有搜索到歌词"));
+    }else {
+        ui->textBrowser->setText(tr("歌词搜索中..."));
+    }
+#endif
 }
 
 void MusicPlayer::slotMuteClicked()
@@ -269,6 +295,16 @@ void MusicPlayer::slotMuteClicked()
         ui->mutepushButton->setStyleSheet(MUTETRUE);
         player->setMuted(true);
     }
+#if 0
+    static int a = 0;
+    if(a == 0) {
+        a++;
+        player->setMuted(true);
+    } else {
+        a--;
+        player->setMuted(false);
+    }
+#endif
 }
 
 void MusicPlayer::slotSpeedClicked(QString str)
@@ -279,7 +315,7 @@ void MusicPlayer::slotSpeedClicked(QString str)
 void MusicPlayer::slotSkinClicked()
 {
     this->backNum ++;
-    if(this->backNum >= 10) {
+    if(this->backNum == 10) {
         this->backNum = 0;
     }
     this->update();
@@ -287,6 +323,12 @@ void MusicPlayer::slotSkinClicked()
 
 void MusicPlayer::slotDoubleSongClick(const QModelIndex &index)
 {
+//    qDebug() << this->x() << this->y() << "you le ? ";
+//    qDebug() << "kkkkkkkkkkkkkkk" << ui->listWidget->x() << ui->listWidget->y() ;
+//    if(player->mediaStatus() == QMediaPlayer::NoMedia) {
+//        return ;
+//    }
+    qDebug() << "jin le ma";
     player->stop();
     m_playCount = index.row();
     player->setMedia(QUrl(songStringListPath->at(m_playCount)));
@@ -294,7 +336,16 @@ void MusicPlayer::slotDoubleSongClick(const QModelIndex &index)
     ui->pausepushButton->setStyleSheet(PAUSEIMAGE);
     musicState = QMediaPlayer::PlayingState;
     m_lrcCount = 4;
-    this->showLyric();
+#if 0
+    QString str1 = songStringListPath->at(m_playCount);
+    QString str2 = str1.left(str1.length() - 4) + QString(".lrc");
+    if(! lrc->getLyric(str2.toStdString().c_str())) {
+        lrc->lrc.clear();
+        ui->textBrowser->setText(tr("没有搜索到歌词"));
+    }else {
+        ui->textBrowser->setText(tr("歌词搜索中..."));
+    }
+#endif
 }
 
 
@@ -322,9 +373,6 @@ void MusicPlayer::slotVolumeChange(int position)
 void MusicPlayer::slotTimeChange(int position)
 {
 //    qDebug() << position;
-    if(position >= musicTime - 10) {
-        return ;
-    }
     player->setPosition(position*1000);
 }
 
@@ -333,19 +381,9 @@ void MusicPlayer::slotDeleteItem(int row)
     if(row == -1) {
         return ;
     }
-    qDebug() << ui->listWidget->item(row)->text();
-    qDebug() << songStringList->at(m_playCount);
-    if(ui->listWidget->item(row)->text() == songStringList->at(m_playCount)) {
-        QMessageBox::warning(this, "WARNING", "歌曲正在播放，不能删除\n",QMessageBox::Ok);
-        return ;
-    }
-    if(m_playCount >= row) {
-        m_playCount--;
-    }
     ui->listWidget->takeItem(row);
     songStringList->removeAt(row);
     songStringListPath->removeAt(row);
-
 }
 
 void MusicPlayer::slotNameUp(int row)
@@ -369,11 +407,6 @@ void MusicPlayer::slotListUpdate()
 
 }
 
-void MusicPlayer::slotOpenMusicFile()
-{
-    this->slotOpenClicked();
-}
-
 void MusicPlayer::updateDurationInfo(qint64 currentInfo)
 {
     QString tStr;
@@ -388,16 +421,17 @@ void MusicPlayer::updateDurationInfo(qint64 currentInfo)
         tStr = currentTime.toString(format) + " / " + totalTime.toString(format);
     }
     ui->timelabel->setText(tStr);
-    if(ui->timehorizontalSlider->value() == musicTime-2) {
+    if(ui->timehorizontalSlider->value() == musicTime-1) {
 //        qDebug() << ui->timehorizontalSlider->value() << musicTime;
-        this->slotNextClicked();
+        slotNextClicked();
         m_lrcCount = 4;
-        this->showLyric();
+        lrc->lrc.clear();
     }
 }
 
 void MusicPlayer::displaySongLyric(int time)
 {
+#if 0
     if(lrc->lrc.count(time) == 0) {
         return ;
     }
@@ -414,6 +448,7 @@ void MusicPlayer::displaySongLyric(int time)
     }
     QString str(lrc->lrc[time].c_str());
     ui->textBrowser->append(str);
+#endif
 }
 
 
@@ -493,26 +528,12 @@ void MusicPlayer::getFilePath()
     foreach(QFileInfo mfi ,dir.entryInfoList()) {
         if(mfi.isFile()) {
             QString file_path = path + separator +  mfi.fileName();
-            songStringListPath->push_back(file_path);
+            songStringListPath->append(file_path);
             // 这里还添加一个歌名列表
-            songStringList->push_back(mfi.fileName());
+            songStringList->append(mfi.fileName());
         }
     }
     ui->listWidget->addItems(*songStringList);
 }
 
-void MusicPlayer::showLyric()
-{
-#if 1
-    QString str1 = songStringListPath->at(m_playCount);
-    QString str2 = str1.left(str1.length() - 4) + QString(".lrc");
-    lrc->lrc.clear();
-    ui->textBrowser->setText(QString("正在播放:") + songStringList->at(m_playCount));
-    if(! lrc->getLyric(str2.toStdString().c_str())) {
-        ui->textBrowser->append(tr("没有搜索到歌词"));
-    }else {
-        ui->textBrowser->append(tr("歌词搜索中..."));
-    }
-#endif
-}
 

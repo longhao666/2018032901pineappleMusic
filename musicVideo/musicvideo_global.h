@@ -1,0 +1,12 @@
+#ifndef MUSICVIDEO_GLOBAL_H
+#define MUSICVIDEO_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(MUSICVIDEO_LIBRARY)
+#  define MUSICVIDEOSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define MUSICVIDEOSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // MUSICVIDEO_GLOBAL_H

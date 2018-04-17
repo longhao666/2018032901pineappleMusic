@@ -9,6 +9,7 @@
 #include <QSqlError>
 #include <QTime>
 #include <QSqlRecord>
+#include <QPaintEvent>
 
 DatabaseDriver::DatabaseDriver(QWidget *parent) :
     QWidget(parent),

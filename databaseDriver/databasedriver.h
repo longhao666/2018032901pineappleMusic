@@ -2,10 +2,8 @@
 #define DATABASEDRIVER_H
 
 #include "databaseDriver_global.h"
-#include <QWidget>
 #include "connection.h"
-#include <QPaintEvent>
-
+#include <QWidget>
 
 namespace Ui {
 class databaseDriver;

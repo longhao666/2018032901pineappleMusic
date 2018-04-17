@@ -4,7 +4,9 @@ SUBDIRS += \
     lhMusicPlayer \
     databaseDriver \
     musicPlayer \
+    musicVideo \
     mainWindow \
+
 
 
 

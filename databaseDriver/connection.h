@@ -2,6 +2,7 @@
 #define CONNECTION_H
 
 #include "databaseDriver_global.h"
+
 class QSqlQuery;
 class QString;
 

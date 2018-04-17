@@ -17,7 +17,6 @@ signals:
     void signalNameUp(int row);
     void signalNameDown(int row);
     void signalListUpdate();
-    void signalOpenMusicFile();
 
 private slots:
     void contextMenuSlot(QPoint p);
@@ -25,7 +24,6 @@ private slots:
     void slotNameUp();
     void slotNameDown();
     void slotListUpdate();
-    void slotOpenMusicFile();
 
 private:
     void createAction();
@@ -42,7 +40,6 @@ private:
     QAction *m_nameUp;
     QAction *m_nameDown;
     QAction *m_listUpdate;
-    QAction *m_openMusicFile;
 };
 
 #endif // MYLISTWIDGET_H

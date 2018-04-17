@@ -60,14 +60,6 @@ void MyListWidget::slotListUpdate()
     emit signalListUpdate();
 }
 
-void MyListWidget::slotOpenMusicFile()
-{
-    QModelIndex index = this->indexAt (m_point);
-    int row = index.row ();//获得QTableWidget列表点击的行数
-    qDebug() << "void MyListWidget::slotOpenMusicFile()" << row;
-    emit signalOpenMusicFile();
-}
-
 void MyListWidget::createAction()
 {
     m_listUpdate = new QAction(tr("刷新"), this);
@@ -78,8 +70,6 @@ void MyListWidget::createAction()
     connect(m_nameUp, SIGNAL(triggered()), this, SLOT(slotNameUp()));
     m_nameDown = new QAction(tr("按名称降序"), this);
     connect(m_nameDown, SIGNAL(triggered()), this, SLOT(slotNameDown()));
-    m_openMusicFile = new QAction(tr("添加"), this);
-    connect(m_openMusicFile, SIGNAL(triggered()), this, SLOT(slotOpenMusicFile()));
 }
 
 void MyListWidget::createMenu()
@@ -87,8 +77,6 @@ void MyListWidget::createMenu()
     m_menu = new QMenu(this);
     m_menu->setStyleSheet("background-color:white");
     m_menu->addAction(m_listUpdate);
-    m_menu->addSeparator();
-    m_menu->addAction(m_openMusicFile);
     m_menu->addSeparator();
     m_menu->addAction(m_deleteItem);
     m_menu->addSeparator();
