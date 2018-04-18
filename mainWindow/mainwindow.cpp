@@ -61,15 +61,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->mainToolBar->setMovable(false);
 
-    musicPlayer = new MusicPlayer(this);
-    musicPlayer->setGeometry(0, 50, this->width(), this->height()-50);
+    musicPlayer = new MusicPlayer(ui->centralWidget);
+    musicPlayer->setGeometry(0, 0, this->width(), this->height()-80);
 #if 0
     connect(this, &MainWindow::signalMainWidgetChange, musicPlayer, &MusicPlayer::slotStopClicked);
 #elif 1
     connect(this, SIGNAL(signalMainWidgetChange()), musicPlayer, SLOT(slotStopClicked()));
 #endif
 
-    p1 = new QPushButton(tr("退出"), this);
+    p1 = new QPushButton(tr("注销"), this);
     ui->mainToolBar->addWidget(p1);
     connect(p1, &QPushButton::clicked, this, &MainWindow::slotEnterWidget);
 

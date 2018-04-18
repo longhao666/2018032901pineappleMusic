@@ -44,12 +44,15 @@ private slots:
     void slotNameUp(int row);
     void slotNameDown(int row);
     void slotListUpdate();
+    void slotSkinIndexChange(int index);
 
 private:
     void updateDurationInfo(qint64 currentInfo);
     void displaySongLyric(int time);
     void getFilePath();
     void showLyric();
+    void painterImage();
+    void painterImageIndividuationPath();
 
 
 
@@ -63,6 +66,8 @@ private:
     int backNum;
     SongLyric *lrc;
     QMediaPlayer::State musicState;
+    bool isIndividuation;
+    QString individuationPath;
 };
 
 #endif // MUSICPLAYER_H

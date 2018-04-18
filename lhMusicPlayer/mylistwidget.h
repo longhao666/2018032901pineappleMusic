@@ -35,8 +35,6 @@ private:
 
 private:
     QMenu* m_menu;
-    QAction* m_exitAction;
-    QAction* m_aboutAction;
     QPoint m_point;
     QAction *m_deleteItem;
     QAction *m_nameUp;
