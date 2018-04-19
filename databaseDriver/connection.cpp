@@ -35,6 +35,9 @@ bool createConnection()
                     "password char check(length(password) between 6 and 6)) ")) {
         qDebug() << query1.lastError();
     }
+    if(!query1.exec("insert into user values (20180418, '123456', '123456');")) {
+        qDebug() << query1.lastError();
+    }
 #endif
 
 #if 0

@@ -29,7 +29,10 @@ DatabaseDriver::DatabaseDriver(QWidget *parent) :
     connect(ui->enterpushButton_2, &QPushButton::clicked, this, &DatabaseDriver::slotEnterClicked);
     connect(ui->forgetpushButton_3, &QPushButton::clicked, this, &DatabaseDriver::slotForgetClicked);
 
-    ui->forgetpushButton_3->setEnabled(false);
+#if 1
+    ui->forgetpushButton_3->hide();
+    ui->logInpushButton_2->hide();
+#endif
 }
 
 DatabaseDriver::~DatabaseDriver()

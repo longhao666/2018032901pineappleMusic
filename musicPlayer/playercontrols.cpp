@@ -7,6 +7,20 @@
 #include <QComboBox>
 #include <QAudio>
 
+#if 0
+#define MUTEFALSE   "border-image:url(./image/mute_1.png)"
+#define MUTETRUE    "border-image:url(./image/mute_0.png)"
+#elif 1
+#define MUTEFALSE   "border-image:url(./image/sond7.png)"
+#define MUTETRUE    "border-image:url(./image/sound.png)"
+#endif
+#define NEXTIMAGE   "border-image:url(./image/next.png)"
+#define PREIMAGE    "border-image:url(./image/previous.png)"
+#define PLAYIMAGE   "border-image:url(./image/play.png)"
+#define PAUSEIMAGE  "border-image:url(./image/pause.png)"
+#define STOPIMAGE   "border-image:url(./image/stop.png)"
+#define HOMEIMAGE   "border-image:url(./image/begin.png)"
+
 PlayerControls::PlayerControls(QWidget *parent)
     : QWidget(parent)
     , playerState(QMediaPlayer::StoppedState)
@@ -21,23 +35,28 @@ PlayerControls::PlayerControls(QWidget *parent)
 {
     // 1
     playButton = new QToolButton(this);
-    playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+    playButton->setStyleSheet(PLAYIMAGE);
+    //playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     connect(playButton, SIGNAL(clicked()), this, SLOT(playClicked()));
     // 2
     stopButton = new QToolButton(this);
-    stopButton->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
+    stopButton->setStyleSheet(STOPIMAGE);
+    //stopButton->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
     stopButton->setEnabled(false);
     connect(stopButton, SIGNAL(clicked()), this, SIGNAL(stop()));
     // 3
     nextButton = new QToolButton(this);
-    nextButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
+    nextButton->setStyleSheet(NEXTIMAGE);
+    //nextButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
     connect(nextButton, SIGNAL(clicked()), this, SIGNAL(next()));
     // 4
     previousButton = new QToolButton(this);
-    previousButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
+    previousButton->setStyleSheet(PREIMAGE);
+    //previousButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
     connect(previousButton, SIGNAL(clicked()), this, SIGNAL(previous()));
     // 5
     muteButton = new QToolButton(this);
+    //muteButton->setStyleSheet(MUTEFALSE);
     muteButton->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
     connect(muteButton, SIGNAL(clicked()), this, SLOT(muteClicked()));
     // 6
@@ -86,15 +105,18 @@ void PlayerControls::setState(QMediaPlayer::State state)
         switch (state) {
         case QMediaPlayer::StoppedState:
             stopButton->setEnabled(false);
-            playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+            playButton->setStyleSheet(PLAYIMAGE);
+            //playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
             break;
         case QMediaPlayer::PlayingState:
             stopButton->setEnabled(true);
-            playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+            playButton->setStyleSheet(PAUSEIMAGE);
+            //playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
             break;
         case QMediaPlayer::PausedState:
             stopButton->setEnabled(true);
-            playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+            playButton->setStyleSheet(PAUSEIMAGE);
+            //playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
             break;
         }
     }

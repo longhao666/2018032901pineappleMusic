@@ -1,4 +1,5 @@
 #include "player.h"
+#include "ui_player.h"
 
 #include "playercontrols.h"
 #include "playlistmodel.h"
@@ -11,13 +12,17 @@
 #include <QMediaMetaData>
 #include <QtWidgets>
 
+
+
 Player::Player(QWidget *parent)
     : QWidget(parent)
     , videoWidget(0)
     , coverLabel(0)
     , slider(0)
     , colorDialog(0)
+    , uiPlayer(new Ui::Player)
 {
+    uiPlayer->setupUi(this);
     // 音乐播放器对象申请空间
     player = new QMediaPlayer(this);
     // 创建
@@ -59,14 +64,14 @@ Player::Player(QWidget *parent)
     // 申请空间
     labelDuration = new QLabel(this);
     connect(slider, SIGNAL(sliderMoved(int)), this, SLOT(seek(int)));
-
+#if 1
     // 申请空间
-    labelHistogram = new QLabel(this);
+    labelHistogram = new QLabel(0);
     labelHistogram->setText("Histogram:");
     // 申请空间
-    videoHistogram = new HistogramWidget(this);
+    videoHistogram = new HistogramWidget();
     // 申请空间
-    audioHistogram = new HistogramWidget(this);
+    audioHistogram = new HistogramWidget();
 
     // 申请布局空间  直方图布局
     QHBoxLayout *histogramLayout = new QHBoxLayout;
@@ -76,7 +81,8 @@ Player::Player(QWidget *parent)
     histogramLayout->addWidget(videoHistogram, 1);
     // 音频
     histogramLayout->addWidget(audioHistogram, 2);
-
+#endif
+#if 1
     videoProbe = new QVideoProbe(this);
     connect(videoProbe, SIGNAL(videoFrameProbed(QVideoFrame)), videoHistogram, SLOT(processFrame(QVideoFrame)));
     videoProbe->setSource(player);
@@ -84,6 +90,7 @@ Player::Player(QWidget *parent)
     audioProbe = new QAudioProbe(this);
     connect(audioProbe, SIGNAL(audioBufferProbed(QAudioBuffer)), audioHistogram, SLOT(processBuffer(QAudioBuffer)));
     audioProbe->setSource(player);
+#endif
 
     QPushButton *openButton = new QPushButton(tr("Open"), this);
 
@@ -110,15 +117,35 @@ Player::Player(QWidget *parent)
             controls, SLOT(setState(QMediaPlayer::State)));
     connect(player, SIGNAL(volumeChanged(int)), controls, SLOT(setVolume(int)));
     connect(player, SIGNAL(mutedChanged(bool)), controls, SLOT(setMuted(bool)));
-
+#if 1
+    // 必须要，后面有内存使用
     // 满屏按钮申请空间
-    fullScreenButton = new QPushButton(tr("FullScreen"), this);
+    fullScreenButton = new QPushButton(tr("FullScreen"), 0);
     fullScreenButton->setCheckable(true);
     // 颜色按钮申请空间
-    colorButton = new QPushButton(tr("Color Options..."), this);
+    colorButton = new QPushButton(tr("Color Options..."), 0);
     colorButton->setEnabled(false);
     connect(colorButton, SIGNAL(clicked()), this, SLOT(showColorDialog()));
+#endif
+    uiPlayer->horizontalLayout->addWidget(playlistView);
 
+    uiPlayer->verticalLayout->addWidget(videoWidget, 10);
+
+    QHBoxLayout *hLayout = new QHBoxLayout;
+    hLayout->addWidget(slider);
+    hLayout->addWidget(labelDuration);
+    uiPlayer->verticalLayout->addLayout(hLayout, 0);
+
+    QBoxLayout *controlLayout = new QHBoxLayout;
+    // 设置边缘
+    controlLayout->setMargin(10);
+    controlLayout->addWidget(openButton);  // 一个
+    // 添加伸展大小
+//    controlLayout->addStretch(1);
+    controlLayout->addWidget(controls); // 两个
+    uiPlayer->verticalLayout->addLayout(controlLayout, 0);
+
+#if 0
     // 1.水平布局 展示布局
     QBoxLayout *displayLayout = new QHBoxLayout;
     // 添加窗口
@@ -136,9 +163,10 @@ Player::Player(QWidget *parent)
     controlLayout->addStretch(1);
     controlLayout->addWidget(controls); // 两个
     controlLayout->addStretch(1);
-
+#if 0
     controlLayout->addWidget(fullScreenButton);// 3个
     controlLayout->addWidget(colorButton); // 4个
+#endif
     // 3.垂直布局  总布局
     QBoxLayout *layout = new QVBoxLayout;
     // 把展示布局添加进去
@@ -151,11 +179,15 @@ Player::Player(QWidget *parent)
     layout->addLayout(hLayout);
     // 把控制音乐的布局添加进去
     layout->addLayout(controlLayout);
+#if 0
     // 把直方图的布局添加进去
     layout->addLayout(histogramLayout);
+#endif
 
     setLayout(layout);
+#endif
 
+#if 0
     if (!isPlayerAvailable()) {
         QMessageBox::warning(this, tr("Service not available"),
                              tr("The QMediaPlayer object does not have a valid service.\n"\
@@ -164,9 +196,10 @@ Player::Player(QWidget *parent)
         controls->setEnabled(false);
         playlistView->setEnabled(false);
         openButton->setEnabled(false);
-        colorButton->setEnabled(false);
-        fullScreenButton->setEnabled(false);
+        //colorButton->setEnabled(false);
+        //fullScreenButton->setEnabled(false);
     }
+#endif
 
     stringList = new QStringList;
     metaDataChanged();
@@ -175,6 +208,15 @@ Player::Player(QWidget *parent)
 Player::~Player()
 {
     delete stringList;
+#if 1
+    delete videoHistogram;
+    delete audioHistogram;
+    //delete videoProbe;
+    //delete audioProbe;
+    delete fullScreenButton;
+    delete colorButton;
+    delete labelHistogram;
+#endif
 }
 
 bool Player::isPlayerAvailable() const

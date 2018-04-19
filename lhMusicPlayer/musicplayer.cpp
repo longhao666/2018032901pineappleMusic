@@ -58,6 +58,7 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
     backNum = 0;
     lrc = new SongLyric;
     musicState = QMediaPlayer::StoppedState;
+    isIndividuation = false;
 
     //connect(ui->openpushButton, &QPushButton::clicked, this, &MusicPlayer::slotOpenClicked);
     connect(ui->stoppushButton, &QPushButton::clicked, this, &MusicPlayer::slotStopClicked);
@@ -66,7 +67,8 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
     connect(ui->nextpushButton, &QPushButton::clicked, this, &MusicPlayer::slotNextClicked);
     connect(ui->mutepushButton, &QPushButton::clicked, this, &MusicPlayer::slotMuteClicked);
     connect(ui->speedcomboBox, &QComboBox::currentTextChanged, this, &MusicPlayer::slotSpeedClicked);
-    connect(ui->skinpushButton, &QPushButton::clicked, this, &MusicPlayer::slotSkinClicked);
+    //connect(ui->skinpushButton, &QPushButton::clicked, this, &MusicPlayer::slotSkinClicked);
+    connect(ui->skincomboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSkinIndexChange(int)));
 #if 0
     connect(ui->listWidget, &QListWidget::doubleClicked, this, &MusicPlayer::slotDoubleSongClick);
 #elif 1
@@ -91,7 +93,8 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
     ui->stoppushButton->setStyleSheet(STOPIMAGE);
     ui->nextpushButton->setStyleSheet(NEXTIMAGE);
     ui->pausepushButton->setStyleSheet(PLAYIMAGE);
-    ui->skinpushButton->setStyleSheet(HOMEIMAGE);
+    //ui->skinpushButton->setStyleSheet(HOMEIMAGE);
+
 
     this->getFilePath();
 }
@@ -102,6 +105,37 @@ MusicPlayer::~MusicPlayer()
     delete songStringList;
     delete songStringListPath;
     delete lrc;
+}
+
+void MusicPlayer::painterImage() {
+    const char *backGround[10]={
+                            BACKGROUND1,
+                            BACKGROUND2,
+                            BACKGROUND3,
+                            //BACKGROUND4,
+                            BACKGROUND5,
+                            //BACKGROUND6,
+                            BACKGROUND7,
+                            BACKGROUND8,
+                            BACKGROUND9,
+                            BACKGROUND10,
+                            BACKGROUND11,
+                            //BACKGROUND12,
+                            BACKGROUND13
+    };
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.drawPixmap(0,0,this->width(),this->height(),
+                       QPixmap(backGround[this->backNum]));
+}
+
+void MusicPlayer::painterImageIndividuationPath()
+{
+    qDebug() << individuationPath;
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.drawPixmap(0,0,this->width(),this->height(),
+                       QPixmap(individuationPath));
 }
 
 void MusicPlayer::paintEvent(QPaintEvent *event)
@@ -436,6 +470,25 @@ void MusicPlayer::slotListUpdate()
 
 }
 
+void MusicPlayer::slotSkinIndexChange(int index)
+{
+    this->backNum = index;
+    this->update();
+    return ;
+    if(this->backNum == 9) {
+        isIndividuation = true;
+        individuationPath = QFileDialog::getOpenFileName(this,
+                                                         tr("选择图片"),
+                                                         tr(""),
+                                                         tr("*.png"));
+        qDebug() << individuationPath;
+        if(individuationPath == NULL) {
+            qDebug() << "individuationPath is NULL";
+            return ;
+        }
+    }
+}
+
 void MusicPlayer::updateDurationInfo(qint64 currentInfo)
 {
     QString tStr;
@@ -578,5 +631,4 @@ void MusicPlayer::showLyric()
     }
 #endif
 }
-
 

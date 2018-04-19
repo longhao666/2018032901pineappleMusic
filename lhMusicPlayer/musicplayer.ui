@@ -69,8 +69,8 @@ p, li { white-space: pre-wrap; }
           <widget class="QPushButton" name="stoppushButton">
            <property name="minimumSize">
             <size>
-             <width>60</width>
-             <height>60</height>
+             <width>50</width>
+             <height>50</height>
             </size>
            </property>
            <property name="text">
@@ -82,8 +82,8 @@ p, li { white-space: pre-wrap; }
           <widget class="QPushButton" name="prepushButton">
            <property name="minimumSize">
             <size>
-             <width>60</width>
-             <height>60</height>
+             <width>50</width>
+             <height>50</height>
             </size>
            </property>
            <property name="text">
@@ -95,8 +95,8 @@ p, li { white-space: pre-wrap; }
           <widget class="QPushButton" name="pausepushButton">
            <property name="minimumSize">
             <size>
-             <width>60</width>
-             <height>60</height>
+             <width>50</width>
+             <height>50</height>
             </size>
            </property>
            <property name="text">
@@ -108,8 +108,8 @@ p, li { white-space: pre-wrap; }
           <widget class="QPushButton" name="nextpushButton">
            <property name="minimumSize">
             <size>
-             <width>60</width>
-             <height>60</height>
+             <width>50</width>
+             <height>50</height>
             </size>
            </property>
            <property name="text">
@@ -121,8 +121,8 @@ p, li { white-space: pre-wrap; }
           <widget class="QPushButton" name="mutepushButton">
            <property name="minimumSize">
             <size>
-             <width>60</width>
-             <height>60</height>
+             <width>50</width>
+             <height>50</height>
             </size>
            </property>
            <property name="text">
@@ -157,16 +157,63 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="skinpushButton">
+          <widget class="QComboBox" name="skincomboBox">
            <property name="minimumSize">
             <size>
-             <width>60</width>
-             <height>60</height>
+             <width>80</width>
+             <height>50</height>
             </size>
            </property>
-           <property name="text">
-            <string/>
-           </property>
+           <item>
+            <property name="text">
+             <string>主题1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>主题2</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>主题3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>主题4</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>主题5</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>主题6</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>主题7</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>主题8</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>主题9</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>主题10</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>

@@ -52,3 +52,6 @@ SOURCES += \
 
 DISTFILES += \
     musicPlayer.pri
+
+FORMS += \
+    player.ui
