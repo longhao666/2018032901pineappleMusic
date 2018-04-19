@@ -23,6 +23,10 @@ QT_END_NAMESPACE
 class PlaylistModel;
 class HistogramWidget;
 
+namespace Ui{
+    class Player;
+}
+
 class Q_DECL_EXPORT Player : public QWidget
 {
     Q_OBJECT
@@ -69,6 +73,7 @@ private:
 public:
     QMediaPlayer *player;
 private:
+    Ui::Player *uiPlayer;
     QMediaPlaylist *playlist;
     VideoWidget *videoWidget;
     QLabel *coverLabel;

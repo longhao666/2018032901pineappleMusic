@@ -62,19 +62,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->setMovable(false);
 
     musicPlayer = new MusicPlayer(ui->centralWidget);
-    musicPlayer->setGeometry(0, 0, this->width(), this->height()-80);
+    musicPlayer->setGeometry(0, 0, this->width(), this->height()-60);
 #if 0
     connect(this, &MainWindow::signalMainWidgetChange, musicPlayer, &MusicPlayer::slotStopClicked);
 #elif 1
     connect(this, SIGNAL(signalMainWidgetChange()), musicPlayer, SLOT(slotStopClicked()));
 #endif
 
-    p1 = new QPushButton(tr("注销"), this);
-    ui->mainToolBar->addWidget(p1);
-    connect(p1, &QPushButton::clicked, this, &MainWindow::slotEnterWidget);
+//    p1 = new QPushButton(tr("注销"), this);
+//    ui->mainToolBar->addWidget(p1);
+//    connect(p1, &QPushButton::clicked, this, &MainWindow::slotEnterWidget);
 
     player = new Player(ui->centralWidget);
-    player->setGeometry(0, 0, this->width(), this->height()-50);
+    player->setGeometry(0, 0, this->width(), this->height()-60);
     player->player->setVolume(20);
 
 
@@ -101,7 +101,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::slotEnterWidget()
 {
-    p1->setEnabled(false);
+    //p1->setEnabled(false);
     this->hide();
     databaseDriver->show();
     emit signalMainWidgetChange(0);
@@ -115,7 +115,7 @@ void MainWindow::slotMusicWidget()
 
 void MainWindow::slotPlayerShow()
 {
-    p1->setEnabled(true);
+    //p1->setEnabled(true);
     this->show();
     databaseDriver->hide();
     this->slotMusicAction();
