@@ -1,4 +1,4 @@
-#include "databasedriver.h"
+﻿#include "databasedriver.h"
 #include "ui_databasedriver.h"
 #include <QDir>
 #include <QPainter>
@@ -18,8 +18,8 @@ DatabaseDriver::DatabaseDriver(QWidget *parent) :
 
     this->setWindowTitle("  登录  ");
 
-    ui->userlineEdit->setPlaceholderText(tr("请输入5-15用户名"));
-    ui->passwordlineEdit_2->setPlaceholderText(tr("请输入6位密码"));
+    ui->userlineEdit->setPlaceholderText(tr("请输入5-15用户\b"));
+    ui->passwordlineEdit_2->setPlaceholderText(tr("请输入6位密码\b"));
 
     QSqlDatabase db = QSqlDatabase::database("lh1");
     query = new QSqlQuery(db);
@@ -30,8 +30,8 @@ DatabaseDriver::DatabaseDriver(QWidget *parent) :
     connect(ui->forgetpushButton_3, &QPushButton::clicked, this, &DatabaseDriver::slotForgetClicked);
 
 #if 1
-    ui->forgetpushButton_3->hide();
-    ui->logInpushButton_2->hide();
+    //ui->forgetpushButton_3->hide();
+    //ui->logInpushButton_2->hide();
 #endif
 }
 

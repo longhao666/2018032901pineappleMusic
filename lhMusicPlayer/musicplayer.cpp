@@ -1,4 +1,4 @@
-#include "musicplayer.h"
+﻿#include "musicplayer.h"
 #include "ui_musicplayer.h"
 #include <QFileDialog>
 #include <QDebug>
@@ -27,7 +27,7 @@ int m_lrcCount = 4;
 #define STOPIMAGE   "border-image:url(./image/stop.png)"
 #define HOMEIMAGE   "border-image:url(./image/begin.png)"
 
-
+#if 0
 #define BACKGROUND1     "./image/n14.png"
 #define BACKGROUND2     "./image/n2.png"
 #define BACKGROUND3     "./image/n4.png"
@@ -41,6 +41,22 @@ int m_lrcCount = 4;
 #define BACKGROUND11    "./image/n5.png"
 #define BACKGROUND12    "./image/n11.png"
 #define BACKGROUND13    "./image/n15.png"
+#endif
+
+#define BACKGROUND1     "./picture/maidouliulang.jpg"
+#define BACKGROUND2     "./picture/fengguang2.jpg"
+#define BACKGROUND3     "./picture/haoche1.jpg"
+//#define BACKGROUND4     "./picture/menghuan1.jpg"
+#define BACKGROUND5     "./picture/qijishaonv1.jpg"
+//#define BACKGROUND6     "./picture/shishangjiaju1.jpg"
+#define BACKGROUND7     "./picture/tonghua1.jpg"
+#define BACKGROUND8     "./picture/menghuan1.jpg"
+#define BACKGROUND9     "./picture/shishangjiaju1.jpg"
+#define BACKGROUND10    "./picture/weimei1.jpg"
+#define BACKGROUND11    "./picture/yangguang1.jpg"
+//#define BACKGROUND12    "./picture/n14.jpg"
+#define BACKGROUND13    "./picture/xiandai1.jpg"
+
 
 MusicPlayer::MusicPlayer(QWidget *parent) :
     QWidget(parent),
@@ -84,6 +100,8 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 
     connect(ui->volumehorizontalSlider, &QSlider::sliderMoved, this, &MusicPlayer::slotVolumeChange);
     connect(ui->timehorizontalSlider, &QSlider::sliderMoved, this, &MusicPlayer::slotTimeChange);
+    connect(ui->discusspushButton, &QPushButton::clicked, this, &MusicPlayer::slotDiscussClicked);
+    connect(ui->searchpushButton, &QPushButton::clicked, this, &MusicPlayer::slotSearchClicked);
 
     ui->volumehorizontalSlider->setValue(50);
     ui->speedcomboBox->setCurrentIndex(1);
@@ -94,7 +112,21 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
     ui->nextpushButton->setStyleSheet(NEXTIMAGE);
     ui->pausepushButton->setStyleSheet(PLAYIMAGE);
     //ui->skinpushButton->setStyleSheet(HOMEIMAGE);
-
+#if 0
+    ui->skincomboBox->addItem("风光1\b");
+    ui->skincomboBox->addItem();
+    ui->skincomboBox->addItem("豪车\b");
+    ui->skincomboBox->addItem();
+    ui->skincomboBox->addItem("时尚家居\b");
+    ui->skincomboBox->addItem("童话\b");
+    ui->skincomboBox->addItem("梦幻\b");
+    ui->skincomboBox->addItem("豪车\b");
+    ui->skincomboBox->addItem("豪车\b");
+#endif
+    QStringList skinStr;
+    skinStr << "麦兜流浪\b" << "风光\b" << "豪车\b" << "奇迹少女\b" << "童话\b"
+         << "梦幻\b" << "时尚家居\b" << "唯美\b" << "阳光\b" << "现代\b";
+    ui->skincomboBox->addItems(skinStr);
 
     this->getFilePath();
 }
@@ -489,6 +521,22 @@ void MusicPlayer::slotSkinIndexChange(int index)
     }
 }
 
+void MusicPlayer::slotDiscussClicked()
+{
+    QString text = ui->discusslineEdit->text();
+    if(text == "") {
+        return ;
+    }
+    QMessageBox::about(this, tr("评论成功\t"),
+                       songStringList->at(m_playCount) + ":\n" + text + "\t");
+    ui->discusslineEdit->clear();
+}
+
+void MusicPlayer::slotSearchClicked()
+{
+
+}
+
 void MusicPlayer::updateDurationInfo(qint64 currentInfo)
 {
     QString tStr;
@@ -625,9 +673,9 @@ void MusicPlayer::showLyric()
     ui->textBrowser->setText(QString("正在播放的歌曲：") + songStringList->at(m_playCount));
     if(! lrc->getLyric(str2.toStdString().c_str())) {
         lrc->lrc.clear();
-        ui->textBrowser->append(tr("没有搜索到歌词"));
+        ui->textBrowser->append(tr("没有搜索到歌词\b"));
     }else {
-        ui->textBrowser->append(tr("歌词搜索中..."));
+        ui->textBrowser->append(tr("歌词搜索中...\b"));
     }
 #endif
 }

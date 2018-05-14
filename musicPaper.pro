@@ -4,6 +4,7 @@ SUBDIRS += \
     lhMusicPlayer \
     databaseDriver \
     musicPlayer \
+    myaudiorecorder \
     mainWindow \
 
 

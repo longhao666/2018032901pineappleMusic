@@ -1,4 +1,4 @@
-#ifndef MUSICPLAYER_H
+﻿#ifndef MUSICPLAYER_H
 #define MUSICPLAYER_H
 
 #include <QWidget>
@@ -45,6 +45,8 @@ private slots:
     void slotNameDown(int row);
     void slotListUpdate();
     void slotSkinIndexChange(int index);
+    void slotDiscussClicked();
+    void slotSearchClicked();
 
 private:
     void updateDurationInfo(qint64 currentInfo);

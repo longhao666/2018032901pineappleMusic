@@ -1,4 +1,4 @@
-#include "playercontrols.h"
+﻿#include "playercontrols.h"
 
 #include <QBoxLayout>
 #include <QSlider>
@@ -115,7 +115,7 @@ void PlayerControls::setState(QMediaPlayer::State state)
             break;
         case QMediaPlayer::PausedState:
             stopButton->setEnabled(true);
-            playButton->setStyleSheet(PAUSEIMAGE);
+            playButton->setStyleSheet(PLAYIMAGE);
             //playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
             break;
         }

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>yinyue.ico</file>
+        <file>tt1.ico</file>
+    </qresource>
+</RCC>

@@ -1,4 +1,4 @@
-#include "mylistwidget.h"
+﻿#include "mylistwidget.h"
 #include <QDebug>
 #include <QMouseEvent>
 #include <QAction>
@@ -68,18 +68,28 @@ void MyListWidget::slotOpenMusicFile()
     emit signalOpenMusicFile();
 }
 
+void MyListWidget::slotMusicList()
+{
+    QModelIndex index = this->indexAt (m_point);
+    int row = index.row ();//获得QTableWidget列表点击的行数
+    qDebug() << "void MyListWidget::slotMusicList()" << row;
+    emit signalMusicList();
+}
+
 void MyListWidget::createAction()
 {
     m_listUpdate = new QAction(tr("刷新"), this);
     connect(m_listUpdate, SIGNAL(triggered()), this, SLOT(slotListUpdate()));
     m_deleteItem = new QAction(tr("删除"), this);
     connect(m_deleteItem, SIGNAL(triggered()), this, SLOT(slotDelelteItem()));
-    m_nameUp = new QAction(tr("按名称升序"), this);
+    m_nameUp = new QAction(tr("按名称升序\b"), this);
     connect(m_nameUp, SIGNAL(triggered()), this, SLOT(slotNameUp()));
-    m_nameDown = new QAction(tr("按名称降序"), this);
+    m_nameDown = new QAction(tr("按名称降序\b"), this);
     connect(m_nameDown, SIGNAL(triggered()), this, SLOT(slotNameDown()));
-    m_openMusicFile = new QAction(tr("添加"), this);
+    m_openMusicFile = new QAction(tr("添加歌曲"), this);
     connect(m_openMusicFile, SIGNAL(triggered()), this, SLOT(slotOpenMusicFile()));
+    m_musicList = new QAction(tr("添加列表"), this);
+    connect(m_musicList, SIGNAL(triggered()), this, SLOT(slotMusicList()));
 }
 
 void MyListWidget::createMenu()
@@ -89,6 +99,7 @@ void MyListWidget::createMenu()
     m_menu->addAction(m_listUpdate);
     m_menu->addSeparator();
     m_menu->addAction(m_openMusicFile);
+    m_menu->addAction(m_musicList);
     m_menu->addSeparator();
     m_menu->addAction(m_deleteItem);
     m_menu->addSeparator();

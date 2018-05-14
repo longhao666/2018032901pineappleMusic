@@ -1,4 +1,4 @@
-#ifndef MYLISTWIDGET_H
+﻿#ifndef MYLISTWIDGET_H
 #define MYLISTWIDGET_H
 
 #include <QListWidget>
@@ -18,6 +18,7 @@ signals:
     void signalNameDown(int row);
     void signalListUpdate();
     void signalOpenMusicFile();
+    void signalMusicList();
 
 private slots:
     void contextMenuSlot(QPoint p);
@@ -26,6 +27,7 @@ private slots:
     void slotNameDown();
     void slotListUpdate();
     void slotOpenMusicFile();
+    void slotMusicList();
 
 private:
     void createAction();
@@ -41,6 +43,7 @@ private:
     QAction *m_nameDown;
     QAction *m_listUpdate;
     QAction *m_openMusicFile;
+    QAction *m_musicList;
 };
 
 #endif // MYLISTWIDGET_H

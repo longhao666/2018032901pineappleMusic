@@ -1,9 +1,10 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
 #include "databasedriver.h"
 #include "player.h"
+#include "myRecorderWidget.h"
 
 
 class MusicPlayer;
@@ -30,13 +31,19 @@ private slots:
     void slotWidgetClost();
     void slotMusicAction();
     void slotMVAction();
+    void slotQuitAction();
+    void slotKGeAction();
 
 private:
     Ui::MainWindow *ui;
     DatabaseDriver *databaseDriver;
     Player *player;
     QPushButton *p1;
+    QPushButton *p2;
+    QLabel *l1;
     MusicPlayer *musicPlayer;
+    MyRecorderWidget *recorder;
+
 
 };
 

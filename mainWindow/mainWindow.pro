@@ -47,3 +47,12 @@ LIBS += -L$$OUT_PWD/../bin -ldatabaseDriver
 INCLUDEPATH += $$PWD/../musicPlayer
 LIBS += -L$$OUT_PWD/../bin -lmusicPlayer
 
+INCLUDEPATH += $$PWD/../myaudiorecorder
+LIBS += -L$$OUT_PWD/../bin -lmyaudiorecorder
+
+
+RESOURCES += \
+    $$PWD/../ico/yinyue.qrc
+
+RC_FILE = yinyue.rc
+
