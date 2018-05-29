@@ -20,6 +20,11 @@ int main(int argc, char *argv[])
     while(query.next()) {
         qDebug() << query.value(0).toString() << query.value(1).toString() << query.value(2).toString();
     }
+    qDebug() << "=================";
+    query.exec("select * from songPath");
+    while(query.next()) {
+        qDebug() << query.value(0).toString() << query.value(1).toString() << query.value(2).toString();
+    }
 
     MainWindow w;
     w.close();

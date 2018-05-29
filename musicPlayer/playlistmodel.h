@@ -1,11 +1,15 @@
-#ifndef PLAYLISTMODEL_H
+﻿#ifndef PLAYLISTMODEL_H
 #define PLAYLISTMODEL_H
 
 #include <QAbstractItemModel>
+#include <QPoint>
 
 QT_BEGIN_NAMESPACE
 class QMediaPlaylist;
 QT_END_NAMESPACE
+
+class QAction;
+class QMenu;
 
 class PlaylistModel : public QAbstractItemModel
 {
@@ -43,6 +47,41 @@ private slots:
 private:
     QMediaPlaylist *m_playlist;
     QMap<QModelIndex, QVariant> m_data;
+
+#if 0
+signals:
+    void signaldeleteItem(int row);
+    void signalNameUp(int row);
+    void signalNameDown(int row);
+    void signalListUpdate();
+    void signalOpenMusicFile();
+    void signalMusicList();
+
+private slots:
+    void contextMenuSlot(QPoint p);
+    void slotDelelteItem();
+    void slotNameUp();
+    void slotNameDown();
+    void slotListUpdate();
+    void slotOpenMusicFile();
+    void slotMusicList();
+
+private:
+    void createAction();
+    void createMenu();
+    void createContextMenu();
+
+
+private:
+    QMenu *m_menu;
+    QPoint m_point;
+    QAction *m_deleteItem;
+    QAction *m_nameUp;
+    QAction *m_nameDown;
+    QAction *m_listUpdate;
+    QAction *m_openMusicFile;
+    QAction *m_musicList;
+#endif
 };
 
 #endif // PLAYLISTMODEL_H

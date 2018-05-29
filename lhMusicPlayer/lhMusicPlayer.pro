@@ -9,6 +9,7 @@ QT       += widgets
 QT       += core gui
 
 QT += multimedia
+QT += sql
 
 
 TARGET = lhMusicPlayer

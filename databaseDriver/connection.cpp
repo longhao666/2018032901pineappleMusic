@@ -1,4 +1,4 @@
-#include "connection.h"
+﻿#include "connection.h"
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -29,6 +29,9 @@ bool createConnection()
         qDebug() << query1.lastError();
     }
 #endif
+    /*
+     * 用户管理的表的创建
+     * */
 #if 1
     if(!query1.exec("create table user (id char check(length(id) between 0 and 30) primary key, "
                     "username char check(length(username) between 5 and 15) unique, "
@@ -36,6 +39,18 @@ bool createConnection()
         qDebug() << query1.lastError();
     }
     if(!query1.exec("insert into user values (20180418, '123456', '123456');")) {
+        qDebug() << query1.lastError();
+    }
+#endif
+
+    /*
+     * 歌曲的表的创建
+     * */
+#if 1
+    if(!query1.exec("create table songPath (id char, "
+                    "songname char unique, "
+                    "songnamepath char) ")) {
+        qDebug() << "songPath is failed";
         qDebug() << query1.lastError();
     }
 #endif

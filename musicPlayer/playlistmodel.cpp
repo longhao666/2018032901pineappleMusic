@@ -1,13 +1,22 @@
-#include "playlistmodel.h"
+﻿#include "playlistmodel.h"
 
 #include <QFileInfo>
 #include <QUrl>
 #include <QMediaPlaylist>
+#include <QAction>
+#include <QMenu>
+#include <QModelIndex>
 
 PlaylistModel::PlaylistModel(QObject *parent)
     : QAbstractItemModel(parent)
     , m_playlist(0)
 {
+#if 0
+    createAction();
+    createMenu();
+    createContextMenu();
+    connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(contextMenuSlot(QPoint)));
+#endif
 }
 
 int PlaylistModel::rowCount(const QModelIndex &parent) const
@@ -120,3 +129,97 @@ void PlaylistModel::changeItems(int start, int end)
     m_data.clear();
     emit dataChanged(index(start,0), index(end,ColumnCount));
 }
+
+#if 0
+void PlaylistModel::contextMenuSlot(QPoint p)
+{
+    this->m_point = p;
+    qDebug() << "void MyListWidget::contextMenuSlot(QPoint p)" << p;
+    m_menu->exec(this->mapToGlobal(p));
+}
+
+void PlaylistModel::slotDelelteItem()
+{
+    QModelIndex index = this->indexAt (m_point);
+    int row = index.row ();//获得QTableWidget列表点击的行数
+    qDebug() << "void MyListWidget::slotDelelteItem()" << row;
+    emit signaldeleteItem(row);
+}
+
+void PlaylistModel::slotNameUp()
+{
+    QModelIndex index = this->indexAt (m_point);
+    int row = index.row ();//获得QTableWidget列表点击的行数
+    qDebug() << "void MyListWidget::slotNameUp()" << row;
+    emit signalNameUp(row);
+}
+
+void PlaylistModel::slotNameDown()
+{
+    QModelIndex index = this->indexAt (m_point);
+    int row = index.row ();//获得QTableWidget列表点击的行数
+    qDebug() << "void MyListWidget::slotNameDown()" << row;
+    emit signalNameDown(row);
+}
+
+void PlaylistModel::slotListUpdate()
+{
+    QModelIndex index = this->indexAt (m_point);
+    int row = index.row ();//获得QTableWidget列表点击的行数
+    qDebug() << "void MyListWidget::slotListUpdate()" << row;
+    emit signalListUpdate();
+}
+
+void PlaylistModel::slotOpenMusicFile()
+{
+    QModelIndex index = this->indexAt (m_point);
+    int row = index.row ();//获得QTableWidget列表点击的行数
+    qDebug() << "void MyListWidget::slotOpenMusicFile()" << row;
+    emit signalOpenMusicFile();
+}
+
+void PlaylistModel::slotMusicList()
+{
+    QModelIndex index = this->indexAt (m_point);
+    int row = index.row ();//获得QTableWidget列表点击的行数
+    qDebug() << "void MyListWidget::slotMusicList()" << row;
+    emit signalMusicList();
+}
+
+void PlaylistModel::createAction()
+{
+    m_listUpdate = new QAction(tr("刷新"), this);
+    connect(m_listUpdate, SIGNAL(triggered()), this, SLOT(slotListUpdate()));
+    m_deleteItem = new QAction(tr("删除"), this);
+    connect(m_deleteItem, SIGNAL(triggered()), this, SLOT(slotDelelteItem()));
+    m_nameUp = new QAction(tr("按名称升序\b"), this);
+    connect(m_nameUp, SIGNAL(triggered()), this, SLOT(slotNameUp()));
+    m_nameDown = new QAction(tr("按名称降序\b"), this);
+    connect(m_nameDown, SIGNAL(triggered()), this, SLOT(slotNameDown()));
+    m_openMusicFile = new QAction(tr("添加歌曲"), this);
+    connect(m_openMusicFile, SIGNAL(triggered()), this, SLOT(slotOpenMusicFile()));
+    m_musicList = new QAction(tr("添加列表"), this);
+    connect(m_musicList, SIGNAL(triggered()), this, SLOT(slotMusicList()));
+}
+
+void PlaylistModel::createMenu()
+{
+    m_menu = new QMenu(this);
+    m_menu->setStyleSheet("background-color:white");
+    m_menu->addAction(m_listUpdate);
+    m_menu->addSeparator();
+    m_menu->addAction(m_openMusicFile);
+    m_menu->addAction(m_musicList);
+    m_menu->addSeparator();
+    m_menu->addAction(m_deleteItem);
+    m_menu->addSeparator();
+    m_menu->addAction(m_nameUp);
+    m_menu->addAction(m_nameDown);
+
+}
+
+void PlaylistModel::createContextMenu()
+{
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
+}
+#endif

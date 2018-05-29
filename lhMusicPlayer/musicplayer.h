@@ -6,6 +6,7 @@
 
 
 class SongLyric;
+class QSqlQuery;
 
 namespace Ui {
 class MusicPlayer;
@@ -55,6 +56,7 @@ private:
     void showLyric();
     void painterImage();
     void painterImageIndividuationPath();
+    void getFilePathList(QString str);
 
 
 
@@ -63,6 +65,8 @@ private:
     QMediaPlayer *player;
     QStringList *songStringList;
     QStringList *songStringListPath;
+    QStringList songStringList1;
+    QStringList songStringListPath1;
     int m_playCount;
     int musicTime;
     int backNum;
@@ -70,6 +74,7 @@ private:
     QMediaPlayer::State musicState;
     bool isIndividuation;
     QString individuationPath;
+    QSqlQuery *query;
 };
 
 #endif // MUSICPLAYER_H

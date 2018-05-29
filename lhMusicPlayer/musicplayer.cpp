@@ -7,6 +7,9 @@
 #include <QPainter>
 #include <map>
 #include <QMessageBox>
+#include <QSqlQuery>
+#include <QSqlDatabase>
+#include <QSqlError>
 
 
 #include "lyricfile.h"
@@ -57,6 +60,132 @@ int m_lrcCount = 4;
 //#define BACKGROUND12    "./picture/n14.jpg"
 #define BACKGROUND13    "./picture/xiandai1.jpg"
 
+int addSongPath(QSqlQuery q, QString songname, QString songnamepath) {
+    QString id = QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
+    q.prepare("insert into songPath(id, songname, songnamepath) values(?,?,?)");
+    q.addBindValue(id);
+    q.addBindValue(songname);
+    q.addBindValue(songnamepath);
+    if(!q.exec()) {
+        qDebug() << "inser into songPsth failed";
+        //qDebug() << q.lastError() << "addSongPath";
+        return 4;
+    }
+    return 0;
+}
+
+int replaceSong(QSqlQuery &q, QStringList &songStringList, QStringList &songStringListPath) {
+    songStringList .clear();
+    songStringListPath.clear();
+    int i = 0;
+    q.exec("select * from songPath");
+    while(q.next()) {
+        //qDebug() << query.value(0).toString() << query.value(1).toString() << query.value(2).toString();
+        songStringList.append(q.value(1).toString());
+        songStringListPath.append(q.value(2).toString());
+        i++;
+    }
+#if 0
+    for(i=0; i<songStringList.size(); i++) {
+        qDebug() << songStringList[i];
+        qDebug() << songStringListPath[i];
+    }
+#endif
+    return 0;
+}
+
+int deleteSong(QSqlQuery &q, QString songname)
+{
+    qDebug() << songname;
+    q.prepare("delete from songPath where songname = ?");
+    q.addBindValue(songname);
+    if(!q.exec()) {
+        qDebug() << "inser into songPsth failed";
+        //qDebug() << q.lastError() << "addSongPath";
+        return 4;
+    }
+#if 0
+    q.exec("select * from songPath");
+    while(q.next()) {
+        qDebug() << q.value(0).toString() << q.value(1).toString() << q.value(2).toString();
+        //songStringList.append(q.value(1).toString());
+        //songStringListPath.append(q.value(2).toString());
+    }
+#endif
+    return 0;
+}
+
+int nameS(QSqlQuery &q, QStringList &songStringList, QStringList &songStringListPath)
+{
+    songStringList .clear();
+    songStringListPath.clear();
+    if(!q.exec("select * from songPath order by songname asc")) {
+        qDebug() << "inser into songPsth failed";
+        qDebug() << q.lastError() << "addSongPath";
+        return 4;
+    }
+#if 1
+    while(q.next()) {
+        //qDebug() << q.value(0).toString() << q.value(1).toString() << q.value(2).toString();
+        songStringList.append(q.value(1).toString());
+        songStringListPath.append(q.value(2).toString());
+    }
+#endif
+    return 0;
+}
+
+int nameJ(QSqlQuery &q, QStringList &songStringList, QStringList &songStringListPath)
+{
+    songStringList .clear();
+    songStringListPath.clear();
+    if(!q.exec("select * from songPath order by songname desc")) {
+        qDebug() << "inser into songPsth failed";
+        qDebug() << q.lastError() << "addSongPath";
+        return 4;
+    }
+#if 1
+    while(q.next()) {
+        //qDebug() << q.value(0).toString() << q.value(1).toString() << q.value(2).toString();
+        songStringList.append(q.value(1).toString());
+        songStringListPath.append(q.value(2).toString());
+    }
+#endif
+    return 0;
+}
+
+
+int searchName(QSqlQuery &q, QString name, QStringList &songStringList, QStringList &songStringListPath)
+{
+    songStringList .clear();
+    songStringListPath.clear();
+//    q.prepare("");
+//    q.addBindValue(name);
+    //QString = "select * from songPath where songname like % ? %" + name + " %"
+    QString str = "select * from songPath where songname like '%" + name + "%'";
+    qDebug() << str;
+    if(!q.exec(str)) {
+        qDebug() << "inser into songPsth failed";
+        qDebug() << q.lastError() << "addSongPath";
+        return 4;
+    }
+#if 1
+    while(q.next()) {
+        //qDebug() << q.value(0).toString() << q.value(1).toString() << q.value(2).toString();
+        songStringList.append(q.value(1).toString());
+        songStringListPath.append(q.value(2).toString());
+    }
+#endif
+#if 0
+    q.exec("select * from songPath");
+    while(q.next()) {
+        qDebug() << q.value(0).toString() << q.value(1).toString() << q.value(2).toString();
+        //songStringList.append(q.value(1).toString());
+        //songStringListPath.append(q.value(2).toString());
+    }
+#endif
+    return 0;
+}
+
 
 MusicPlayer::MusicPlayer(QWidget *parent) :
     QWidget(parent),
@@ -76,6 +205,9 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
     musicState = QMediaPlayer::StoppedState;
     isIndividuation = false;
 
+    QSqlDatabase db = QSqlDatabase::database("lh1");
+    query = new QSqlQuery(db);
+
     //connect(ui->openpushButton, &QPushButton::clicked, this, &MusicPlayer::slotOpenClicked);
     connect(ui->stoppushButton, &QPushButton::clicked, this, &MusicPlayer::slotStopClicked);
     connect(ui->prepushButton, &QPushButton::clicked, this, &MusicPlayer::slotPreClicked);
@@ -94,6 +226,7 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
     connect(ui->listWidget, &MyListWidget::signalNameDown, this, &MusicPlayer::slotNameDown);
     connect(ui->listWidget, &MyListWidget::signalListUpdate, this, &MusicPlayer::slotListUpdate);
     connect(ui->listWidget, &MyListWidget::signalOpenMusicFile, this, &MusicPlayer::slotOpenClicked);
+    connect(ui->listWidget, &MyListWidget::signalMusicList, this, &MusicPlayer::slotListUpdate);
 #endif
     connect(player, &QMediaPlayer::positionChanged, this, &MusicPlayer::slotMusicPositionChange);
     connect(player, &QMediaPlayer::durationChanged, this, &MusicPlayer::slotMusicDurationChange);
@@ -170,6 +303,52 @@ void MusicPlayer::painterImageIndividuationPath()
                        QPixmap(individuationPath));
 }
 
+void MusicPlayer::getFilePathList(QString str)
+{
+    qDebug() << str;
+    ui->listWidget->clear();
+    songStringListPath1.clear();
+    songStringList1.clear();
+#if 0
+    QString path = "D:/QtProject/QtMusic/lhMusicSong/好歌";
+#elif 1
+    QString path = str;
+#endif
+    //qDebug("jinle");
+    QDir dir(path);
+    //判断路径是否存在
+    if(!dir.exists()) {
+        qDebug("113, dir is NULL");
+        return ;
+    }
+
+    QStringList filters;
+    filters << QString("*.mp3");
+    dir.setFilter(QDir::Files | QDir::NoSymLinks); //设置类型过滤器，只为文件格式
+    dir.setNameFilters(filters); //设置文件名称过滤器，只为filters格式（后缀为.jpeg等图片格式）
+
+    int dirCount = dir.count();
+    if(dirCount <= 0) {
+        return ;
+    }
+    //QStringList stringList;
+    //获取分隔符
+    //QChar separator = QDir::separator();
+    QChar separator = QChar('/');
+
+    foreach(QFileInfo mfi ,dir.entryInfoList()) {
+        if(mfi.isFile()) {
+            QString file_path = path + separator +  mfi.fileName();
+            //songStringListPath->append(file_path);
+            // 这里还添加一个歌名列表
+            //songStringList->append(mfi.fileName());
+            addSongPath(*query, mfi.fileName(), file_path);
+        }
+    }
+    replaceSong(*query, songStringList1, songStringListPath1);
+    ui->listWidget->addItems(songStringList1);
+}
+
 void MusicPlayer::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
@@ -228,7 +407,7 @@ void MusicPlayer::slotOpenClicked()
     QString str = QFileDialog::getOpenFileName(this,
                                                     tr("open Music"),
                                                     tr(""),
-                                                    tr("*.mp3"));
+                                                    tr("*.mp3 *.wav"));
     if(str == NULL) {
         qDebug() << "str is NULL";
         return ;
@@ -236,16 +415,17 @@ void MusicPlayer::slotOpenClicked()
     ui->listWidget->clear();
     int count = str.toStdString().find_last_of("/");
     QString m((str.toStdString().c_str()) + count + 1);
-    for(int i=0; i<songStringList->size(); i++) {
-        if(songStringList->at(i) == m) {
+    for(int i=0; i<songStringList1.size(); i++) {
+        if(songStringList1.at(i) == m) {
             qDebug() << "equal";
-            songStringListPath->removeAt(i);
-            songStringList->removeAt(i);
+            songStringListPath1.removeAt(i);
+            songStringList1.removeAt(i);
         }
     }
-    songStringListPath->push_back(str);
-    songStringList->push_back(m);
-    ui->listWidget->addItems(*songStringList);
+    addSongPath(*query, m, str);
+    songStringListPath1.push_back(str);
+    songStringList1.push_back(m);
+    ui->listWidget->addItems(songStringList1);
 #endif
 }
 
@@ -266,8 +446,9 @@ void MusicPlayer::slotPreClicked()
     player->stop();
     m_playCount--;
     if(m_playCount <= -1) {
-        m_playCount = songStringList->length() - 1;
+        m_playCount = songStringList1.length() - 1;
     }
+    player->setMedia(QUrl(songStringListPath1.at(m_playCount)));
     player->play();
     ui->pausepushButton->setStyleSheet(PAUSEIMAGE);
     m_lrcCount = 4;
@@ -306,7 +487,7 @@ void MusicPlayer::slotPauseClicked()
         ui->pausepushButton->setStyleSheet(PAUSEIMAGE);
         break;
     case QMediaPlayer::StoppedState: {
-        player->setMedia(QUrl(songStringListPath->at(m_playCount)));
+        player->setMedia(QUrl(songStringListPath1.at(m_playCount)));
         player->play();
         musicState = QMediaPlayer::PlayingState;
         ui->pausepushButton->setStyleSheet(PAUSEIMAGE);
@@ -350,24 +531,16 @@ void MusicPlayer::slotNextClicked()
     }
     player->stop();
     m_playCount++;
-    if(m_playCount >= songStringList->length()) {
+    if(m_playCount >= songStringList1.length()) {
         m_playCount = 0;
     }
-    player->setMedia(QUrl(songStringListPath->at(m_playCount)));
+    qDebug() << "======1";
+    player->setMedia(QUrl(songStringListPath1.at(m_playCount)));
+    qDebug() << "======2";
     player->play();
     ui->pausepushButton->setStyleSheet(PAUSEIMAGE);
     m_lrcCount = 4;
-    this->show();
-#if 0
-    QString str1 = songStringListPath->at(m_playCount);
-    QString str2 = str1.left(str1.length() - 4) + QString(".lrc");
-    if(! lrc->getLyric(str2.toStdString().c_str())) {
-        lrc->lrc.clear();
-        ui->textBrowser->setText(tr("没有搜索到歌词"));
-    }else {
-        ui->textBrowser->setText(tr("歌词搜索中..."));
-    }
-#endif
+    this->showLyric();
 }
 
 void MusicPlayer::slotMuteClicked()
@@ -418,7 +591,7 @@ void MusicPlayer::slotDoubleSongClick(const QModelIndex &index)
     qDebug() << "jin le ma";
     player->stop();
     m_playCount = index.row();
-    player->setMedia(QUrl(songStringListPath->at(m_playCount)));
+    player->setMedia(QUrl(songStringListPath1.at(m_playCount)));
     player->play();
     ui->pausepushButton->setStyleSheet(PAUSEIMAGE);
     musicState = QMediaPlayer::PlayingState;
@@ -466,10 +639,13 @@ void MusicPlayer::slotTimeChange(int position)
 
 void MusicPlayer::slotDeleteItem(int row)
 {
-    if(row == -1) {
+    qDebug() << row << songStringList1.size() << m_playCount;
+    if(row <= -1 || row >= songStringList1.size()) {
         return ;
     }
-    if(ui->listWidget->item(row)->text() == songStringList->at(m_playCount)) {
+    qDebug() << row << songStringList1.size() << ui->listWidget->item(row)->text();
+    QString strItem = ui->listWidget->item(row)->text();
+    if( strItem == songStringList1.at(m_playCount)) {
         QMessageBox::warning(this, "WARNING", "歌曲正在播放，不能删除\n", QMessageBox::Ok);
         return ;
     }
@@ -477,16 +653,21 @@ void MusicPlayer::slotDeleteItem(int row)
         m_playCount--;
     }
     ui->listWidget->takeItem(row);
-    songStringList->removeAt(row);
-    songStringListPath->removeAt(row);
+    songStringList1.removeAt(row);
+    songStringListPath1.removeAt(row);
+    deleteSong(*query, strItem);
 }
 
 void MusicPlayer::slotNameUp(int row)
 {
     qDebug() << "void MusicPlayer::slotNameUp(int row)" << row;
-    if(row == -1) {
+    if(row <= -1) {
         return ;
     }
+    nameS(*query, songStringList1, songStringListPath1);
+    //replaceSong(*query, songStringList1, songStringListPath1);
+    ui->listWidget->clear();
+    ui->listWidget->addItems(songStringList1);
 }
 
 void MusicPlayer::slotNameDown(int row)
@@ -495,10 +676,32 @@ void MusicPlayer::slotNameDown(int row)
     if(row == -1) {
         return ;
     }
+    nameJ(*query, songStringList1, songStringListPath1);
+    //replaceSong(*query, songStringList1, songStringListPath1);
+    ui->listWidget->clear();
+    ui->listWidget->addItems(songStringList1);
+#if 0
+    query->exec("select * from songPath");
+    while(query->next()) {
+        qDebug() << query->value(0).toString() << query->value(1).toString() << query->value(2).toString();
+        //songStringList.append(q.value(1).toString());
+        //songStringListPath.append(q.value(2).toString());
+    }
+#endif
 }
 
 void MusicPlayer::slotListUpdate()
 {
+    qDebug() << "void MusicPlayer::slotListUpdate()";
+    QString str = QFileDialog::getExistingDirectory(this,
+                                                    "open music",
+                                                    "");
+    if(str == "") {
+        qDebug() << "opne NULL";
+        return ;
+    }
+    qDebug() << str << "==";
+    getFilePathList(str);
 
 }
 
@@ -528,12 +731,23 @@ void MusicPlayer::slotDiscussClicked()
         return ;
     }
     QMessageBox::about(this, tr("评论成功\t"),
-                       songStringList->at(m_playCount) + ":\n" + text + "\t");
+                       songStringList1.at(m_playCount) + ":\n" + text + "\t");
     ui->discusslineEdit->clear();
 }
 
 void MusicPlayer::slotSearchClicked()
 {
+    QString str = ui->searchlineEdit->text();
+    if(str == "") {
+        replaceSong(*query, songStringList1, songStringListPath1);
+        ui->listWidget->clear();
+        ui->listWidget->addItems(songStringList1);
+        return ;
+    }
+    qDebug() << str;
+    searchName(*query, str, songStringList1, songStringListPath1);
+    ui->listWidget->clear();
+    ui->listWidget->addItems(songStringList1);
 
 }
 
@@ -551,13 +765,17 @@ void MusicPlayer::updateDurationInfo(qint64 currentInfo)
         tStr = currentTime.toString(format) + " / " + totalTime.toString(format);
     }
     ui->timelabel->setText(tStr);
-    if(ui->timehorizontalSlider->value() == musicTime-1) {
-//        qDebug() << ui->timehorizontalSlider->value() << musicTime;
+#if 0
+    if(ui->timehorizontalSlider->value() + 3 >= musicTime) {
+        qDebug() << ui->timehorizontalSlider->value() << musicTime << "----";
+
+        //player->stop();
         slotNextClicked();
         m_lrcCount = 4;
-        ui->textBrowser->clear();
-        lrc->lrc.clear();
+        //ui->textBrowser->clear();
+        //lrc->lrc.clear();
     }
+#endif
 }
 
 void MusicPlayer::displaySongLyric(int time)
@@ -588,8 +806,8 @@ void MusicPlayer::displaySongLyric(int time)
 void MusicPlayer::getFilePath()
 {
     ui->listWidget->clear();
-    songStringListPath->clear();
-    songStringList->clear();
+    songStringListPath1.clear();
+    songStringList1.clear();
 #if 0
     QString path = "D:/QtProject/QtMusic/lhMusicSong/好歌";
 #elif 1
@@ -657,20 +875,22 @@ void MusicPlayer::getFilePath()
     foreach(QFileInfo mfi ,dir.entryInfoList()) {
         if(mfi.isFile()) {
             QString file_path = path + separator +  mfi.fileName();
-            songStringListPath->append(file_path);
+            //songStringListPath->append(file_path);
             // 这里还添加一个歌名列表
-            songStringList->append(mfi.fileName());
+            //songStringList->append(mfi.fileName());
+            addSongPath(*query, mfi.fileName(), file_path);
         }
     }
-    ui->listWidget->addItems(*songStringList);
+    replaceSong(*query, songStringList1, songStringListPath1);
+    ui->listWidget->addItems(songStringList1);
 }
 
 void MusicPlayer::showLyric()
 {
 #if 1
-    QString str1 = songStringListPath->at(m_playCount);
+    QString str1 = songStringListPath1.at(m_playCount);
     QString str2 = str1.left(str1.length() - 4) + QString(".lrc");
-    ui->textBrowser->setText(QString("正在播放的歌曲：") + songStringList->at(m_playCount));
+    ui->textBrowser->setText(QString("正在播放的歌曲：") + songStringList1.at(m_playCount));
     if(! lrc->getLyric(str2.toStdString().c_str())) {
         lrc->lrc.clear();
         ui->textBrowser->append(tr("没有搜索到歌词\b"));
